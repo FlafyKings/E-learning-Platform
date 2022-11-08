@@ -23,7 +23,7 @@ const client = new Client({
   // FROM pg_settings
   // WHERE name = 'port';
   password: "postgres",
-  database: "Epinote",
+  database: "LepszyUPEL",
 });
 
 client.connect();
