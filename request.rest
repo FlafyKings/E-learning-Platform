@@ -1,0 +1,19 @@
+GET http://localhost:8080/dashboard
+Content-Type: application/json
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaWdhLnN6b3JkeWtvd3NrYSIsImlhdCI6MTY2MTExOTU3OX0.od-9W5j-HqIxnSe_Pz2XB9wrgZDZHWwTPCbU1Blococ
+
+
+###
+
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+    "login": "iga.szordykowska",
+    "password": "1234567"
+}
+
+###
+
+GET http://localhost:8080/posts
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaWdhLnN6b3JkeWtvd3NrYSIsImlhdCI6MTY2MTExOTU3OX0.od-9W5j-HqIxnSe_Pz2XB9wrgZDZHWwTPCbU1Blococ

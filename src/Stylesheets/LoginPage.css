@@ -1,0 +1,19 @@
+
+.LoginPaper{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%) ;
+}
+
+.LogoHeader{
+    text-align: center;
+    margin-top: 1,5rem;
+}
+
+/* .alertAbsolute{
+    position: absolute;
+    top: 0%;
+    left: 50%;
+} */
+
