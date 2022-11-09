@@ -118,7 +118,7 @@ function RegisterPage() {
             onChange={(event) => setPassowrd(event.target.value)}
             value={password}
             required
-            label="Password"
+            label="Hasło"
             name="password"
             id="password"
             type="password"
@@ -131,7 +131,7 @@ function RegisterPage() {
             onChange={(event) => setPasswordConfirm(event.target.value)}
             value={passwordConfirm}
             required
-            label="Confirm"
+            label="Potwierdź"
             name="passwordConfirm"
             id="passwordConfirm"
             type="password"
@@ -147,10 +147,10 @@ function RegisterPage() {
           gap={5}
         >
           <Link component={Button} variant="text" underline="none" href="/">
-            Sign In Instead
+            Zaloguj się
           </Link>
           <Button variant="contained" type="submit">
-            Register
+            Rejestruj
           </Button>
         </Box>
       </Box>

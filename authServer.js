@@ -73,17 +73,17 @@ app.post("/login", async (req, res) => {
   if (re.test(login) == false) {
     return res
       .status(400)
-      .json({ message: "Login is not valid", type: "Login" });
+      .json({ message: "Login jest nieprawidłowy", type: "Login" });
   }
   if (password.length < 6) {
     return res
       .status(400)
-      .json({ message: "Password is too short", type: "Password" });
+      .json({ message: "Hasło jest za krótkie", type: "Password" });
   }
   if (password.length > 30) {
     return res
       .status(400)
-      .json({ message: "Password is too long", type: "Password" });
+      .json({ message: "Hasło jest za długie", type: "Password" });
   }
 
   try {
@@ -94,7 +94,7 @@ app.post("/login", async (req, res) => {
     if (result.rows.length == 0) {
       return res
         .status(400)
-        .json({ message: "User doesnt exist", type: "Login" });
+        .json({ message: "Użytkownik nie istnieje", type: "Login" });
     } else {
       bcrypt.compare(password, result.rows[0].password).then((response) => {
         if (response) {
@@ -107,7 +107,7 @@ app.post("/login", async (req, res) => {
           });
         } else {
           res.status(400).json({
-            message: "Password is incorrect",
+            message: "Hasło jest niepoprawne",
             type: "Password",
           });
         }
@@ -134,23 +134,23 @@ app.post("/register", async (req, res) => {
   if (re.test(login) == false) {
     return res
       .status(400)
-      .json({ message: "Login is not valid", type: "Login" });
+      .json({ message: "Login jest nieprawidłowy", type: "Login" });
   }
   if (password.length < 6) {
     return res
       .status(400)
-      .json({ message: "Password is too short", type: "Password" });
+      .json({ message: "Hasło jest za krótkie", type: "Password" });
   }
   if (password.length > 30) {
     return res
       .status(400)
-      .json({ message: "Password is too long", type: "Password" });
+      .json({ message: "Hasło jest za długie", type: "Password" });
   }
 
   if (password != passwordConfirm) {
     return res
       .status(400)
-      .json({ message: "Passwords dont match", type: "PasswordConfirm" });
+      .json({ message: "Hasła nie są identyczne", type: "PasswordConfirm" });
   }
 
   try {
@@ -161,7 +161,7 @@ app.post("/register", async (req, res) => {
     if (result.rows.length != 0) {
       return res
         .status(400)
-        .json({ message: "User already exists", type: "Login" });
+        .json({ message: "Użytkownik już istnieje", type: "Login" });
     }
   } catch (err) {
     console.log(err);
@@ -175,13 +175,13 @@ app.post("/register", async (req, res) => {
         if (err) {
           console.log(err.message);
           res.status(401).json({
-            message: "User not successfully created",
+            message: "Utworzenie użytkownika nie powiodło się",
             error: err.message,
           });
         } else if (result) {
           const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
           res.status(200).json({
-            message: "User successfully created",
+            message: "Utworzenie użytkownika powiodło się",
             redirect: "/dashboard",
             accessToken: accessToken,
           });

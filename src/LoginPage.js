@@ -110,7 +110,7 @@ function LoginPage() {
             value={password}
             required
             fullWidth
-            label="Password"
+            label="Hasło"
             name="password"
             id="password"
             type="password"
@@ -119,7 +119,7 @@ function LoginPage() {
           />
           <FormControlLabel
             control={<Checkbox size="small" />}
-            label="Remember Me"
+            label="Zapamiętaj mnie"
           />
         </Box>
 
@@ -135,10 +135,10 @@ function LoginPage() {
             underline="none"
             href="/register"
           >
-            Create Account
+            Utwórz konto
           </Link>
           <Button variant="contained" type="submit">
-            Log In
+            Zaloguj
           </Button>
         </Box>
       </Box>
