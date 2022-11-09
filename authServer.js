@@ -98,15 +98,12 @@ app.post("/login", async (req, res) => {
     } else {
       bcrypt.compare(password, result.rows[0].password).then((response) => {
         if (response) {
-          //const accessToken = generateAccessToken(user)
-          //const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
-          const accessToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
+          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
           res.status(200).json({
             message: "Login successfull",
             redirect: "/dashboard",
             accessToken: accessToken,
-            //refreshToken: refreshToken
           });
         } else {
           res.status(400).json({
