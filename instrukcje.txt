@@ -1,0 +1,9 @@
+1. Zainstalować PgAdmin 4 
+2. Nazwa użytkownika jako: postgres
+3. Port: 5432 (to jest domyślny postgresu i nie pamiętam czy się to ustawia ale jeśli tak to ten trzeba)
+4. Hasło: postgres
+5. W PgAdmin stworzyć bazę danych o nazwie LepszyUPEL
+6. Serwer włącza się za pomocą komendy: npm run dev
+7. Klienta włącza się za pomocą komendy: npm start
+
+Szczerze wątpie żeby obyło się bez jakiś problemów więc pewnie będzie trzeba to ogarnąć potem jak się zgadamy. 
