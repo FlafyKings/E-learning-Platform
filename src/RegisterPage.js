@@ -11,6 +11,8 @@ import {
   Alert,
 } from "@mui/material";
 import axios from "./AxiosInterceptor.js";
+import useAuth from "./hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function RegisterPage() {
   //Variables describing users credentials
@@ -22,6 +24,10 @@ function RegisterPage() {
   const [alert, setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+
+  const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,11 +43,12 @@ function RegisterPage() {
         passwordConfirm: passwordConfirm,
       })
       .then((response) => {
-        localStorage.setItem("jwtToken", response.data.accessToken);
-        if (response.data.redirect) {
-          window.location.replace(response.data.redirect);
-        }
-        console.log(response);
+        localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
+
+        let roles = [response.data.roles];
+        let accessToken = response.data.accessToken;
+        setAuth({ login, password, roles, accessToken });
+        navigate("/dashboard", true);
       })
       .catch((error) => {
         //Error handling

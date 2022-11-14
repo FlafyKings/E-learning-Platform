@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./Stylesheets/LoginPage.css";
 import {
   Box,
@@ -11,22 +11,45 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "./AxiosInterceptor.js";
+import useAuth from "./hooks/useAuth";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function LoginPage() {
   //Variables describing users credentials
   const [login, setLogin] = useState("");
-  const [password, setPassowrd] = useState("");
+  const [password, setPassword] = useState("");
 
   //Variables describing alerts
   const [alert, setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
+  const { auth, setAuth } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const userRef = useRef();
+  const from = location.state?.from?.pathname || "/";
+
+  // const [accessToken, setAccessToken] = useState("");
+  // const [roles, setRoles] = useState("");
+
+  // useEffect(() => {
+  //   userRef.current.focus();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (isInitialMount.current) {
+  //     isInitialMount.current = false;
+  //   } else {
+  //     setLogin("");
+  //     setPassword("");
+  //     setLogged(true);
+  //   }
+  // }, [auth]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    console.log(login);
-    console.log(password);
 
     await axios
       .post("/login", {
@@ -34,11 +57,14 @@ function LoginPage() {
         password: password,
       })
       .then((response) => {
-        localStorage.setItem("jwtToken", response.data.accessToken);
-        if (response.data.redirect) {
-          window.location.replace(response.data.redirect);
-        }
-        console.log(response);
+        localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
+        // setAccessToken(response.data.accessToken);
+        // setRoles([response.data.roles]);
+        // console.log(roles, accessToken);
+        let roles = [response.data.roles];
+        let accessToken = response.data.accessToken;
+        setAuth({ login, password, roles, accessToken });
+        navigate("/dashboard", true);
       })
       .catch((error) => {
         //Error handling
@@ -106,7 +132,7 @@ function LoginPage() {
           <TextField
             helperText={alertType === "Password" ? alertMessage : ""}
             error={alertType === "Password" ? alertMessage : ""}
-            onChange={(event) => setPassowrd(event.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             value={password}
             required
             fullWidth

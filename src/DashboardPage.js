@@ -5,9 +5,12 @@ import { TextField } from "@mui/material";
 import "./Stylesheets/LoginPage.css";
 import { Paper, Button, Box, FormControlLabel } from "@mui/material";
 import axios from "./AxiosInterceptor.js";
+import { useContext } from "react";
+import AuthContext from "./context/AuthProvider";
 
 function DashboardPage() {
   const [result, setResult] = useState("");
+  const { auth, setAuth } = useContext(AuthContext);
 
   const handleClick = (event) => {
     localStorage.setItem("jwtToken", "");
@@ -18,6 +21,7 @@ function DashboardPage() {
     .get("/dashboard")
     .then((response) => {
       setResult(response.data.login);
+      console.log(auth);
     })
     .catch((err) => {
       console.log(err);

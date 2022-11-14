@@ -87,6 +87,7 @@ app.post("/login", async (req, res) => {
       `SELECT * FROM public."user" WHERE login = \'${login}\'`
     );
     console.log(result.rows);
+    console.log(result.rows[0].role);
     if (result.rows.length == 0) {
       return res
         .status(400)
@@ -98,8 +99,9 @@ app.post("/login", async (req, res) => {
 
           res.status(200).json({
             message: "Login successfull",
-            redirect: "/dashboard",
+            redirect: "/",
             accessToken: accessToken,
+            roles: result.rows[0].role,
           });
         } else {
           res.status(400).json({
@@ -180,6 +182,7 @@ app.post("/register", async (req, res) => {
             message: "Utworzenie użytkownika powiodło się",
             redirect: "/dashboard",
             accessToken: accessToken,
+            roles: [1000],
           });
         }
       }
