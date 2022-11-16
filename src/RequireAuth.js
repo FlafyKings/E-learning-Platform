@@ -11,8 +11,8 @@ const RequireAuth = ({ allowedRoles }) => {
   //   console.log("use:", auth);
   // }, [auth]);
 
-  console.log(auth.roles);
-  console.log(auth);
+  // console.log(auth.roles);
+  // console.log(auth);
   //debugger;
   return auth?.roles?.find((role) => {
     // THIS CHECKS ONLY ONE ROLE, CHANGE WHEN NEEDED

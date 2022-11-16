@@ -7,6 +7,7 @@ import { Paper, Button, Box, FormControlLabel } from "@mui/material";
 import axios from "./AxiosInterceptor.js";
 import { useContext } from "react";
 import AuthContext from "./context/AuthProvider";
+import Users from "./Users";
 
 function DashboardPage() {
   const [result, setResult] = useState("");
@@ -21,7 +22,7 @@ function DashboardPage() {
     .get("/dashboard")
     .then((response) => {
       setResult(response.data.login);
-      console.log(auth);
+      console.log(response.data.login);
     })
     .catch((err) => {
       console.log(err);
@@ -29,6 +30,7 @@ function DashboardPage() {
   return (
     <div>
       {" "}
+      <Users></Users>
       <Button onClick={handleClick} variant="contained">
         Wyloguj
       </Button>{" "}

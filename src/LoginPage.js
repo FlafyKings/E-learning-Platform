@@ -52,12 +52,12 @@ function LoginPage() {
     event.preventDefault();
 
     await axios
-      .post("/login", {
-        login: login,
-        password: password,
+      .post("/login", JSON.stringify({ login, password }), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       })
       .then((response) => {
-        localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
+        //localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
         // setAccessToken(response.data.accessToken);
         // setRoles([response.data.roles]);
         // console.log(roles, accessToken);

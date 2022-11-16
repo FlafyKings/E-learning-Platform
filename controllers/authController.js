@@ -1,14 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const client = require("../database");
+const client = require("../config/database");
 
 const handleLogin = async (req, res) => {
   //Creating variables representing form values
   let login = req.body.login;
   let password = req.body.password;
-
-  //Creating a user object for a token
-  const user = { login: login };
 
   //Checking the validity of given values
   const re = new RegExp("[a-z]{3,}.[a-z]{2,}");
@@ -42,13 +39,39 @@ const handleLogin = async (req, res) => {
     } else {
       bcrypt.compare(password, result.rows[0].password).then((response) => {
         if (response) {
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+          const roles = [result.rows[0].role];
+          const accessToken = jwt.sign(
+            {
+              UserInfo: {
+                login: login,
+                roles: roles,
+              },
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "10s" }
+          );
+
+          const refreshToken = jwt.sign(
+            { login: login },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "1d" }
+          );
+
+          const updateRefreshToken = client.query(
+            `UPDATE public."user" SET refresh_token = \'${refreshToken}\' WHERE login = \'${login}\'`
+          );
+
+          res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+            maxAge: 24 * 60 * 60 * 1000,
+          });
 
           res.status(200).json({
             message: "Login successfull",
-            redirect: "/",
             accessToken: accessToken,
-            roles: result.rows[0].role,
+            roles: roles,
           });
         } else {
           res.status(400).json({

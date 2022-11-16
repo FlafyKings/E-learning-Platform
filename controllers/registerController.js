@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const client = require("../database");
+const client = require("../config/database");
 
 //Register Page POST Request
 const handleRegister = async (req, res) => {

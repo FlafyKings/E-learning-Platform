@@ -153,7 +153,12 @@ function RegisterPage() {
           justifyContent="space-between"
           gap={5}
         >
-          <Link component={Button} variant="text" underline="none" href="/">
+          <Link
+            component={Button}
+            variant="text"
+            underline="none"
+            href="/login"
+          >
             Zaloguj się
           </Link>
           <Button variant="contained" type="submit">

@@ -7,6 +7,11 @@ CREATE TABLE IF NOT EXISTS public."user"
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
     login character varying(30) COLLATE pg_catalog."default" NOT NULL,
     password character varying(400) COLLATE pg_catalog."default" NOT NULL,
+    first_name character varying(30) COLLATE pg_catalog."default",
+    last_name character varying(40) COLLATE pg_catalog."default",
+    email character varying(40) COLLATE pg_catalog."default",
+    role bigint NOT NULL DEFAULT 1000,
+    refresh_token character varying(400) COLLATE pg_catalog."default",
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 
