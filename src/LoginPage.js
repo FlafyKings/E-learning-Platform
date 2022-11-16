@@ -120,7 +120,7 @@ function LoginPage() {
           onChange={(event) => setLogin(event.target.value)}
           value={login}
           required
-          autofocus
+          autoFocus
           label="Login"
           name="login"
           id="login"

@@ -1,33 +1,32 @@
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const express = require("express");
+
+//CORS
+const cors = require("cors");
+const corsOptions = require("./config/corsOptions");
+
 const router = express.Router();
 const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const app = express();
+
+//CONTROLLERS
+const authController = require("./controllers/authController");
+const registerController = require("./controllers/registerController");
+
 const jwt = require("jsonwebtoken");
 const { auth } = require("express-openid-connect");
+const { logger } = require("./middleware/logEvents");
+const client = require("./database");
 
 //PROXY SETTINGS
 //Windows: "localhost:8080"
 //Mac: "http://localhost:8080/"
 
-//DATABASE
-const { Client } = require("pg");
-const client = new Client({
-  host: "localhost",
-  user: "postgres",
-  port: 5432,
-  // Change using:
-  // SELECT *
-  // FROM pg_settings
-  // WHERE name = 'port';
-  password: "postgres",
-  database: "LepszyUPEL",
-});
-
 client.connect();
 
+app.use(logger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -49,146 +48,8 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// req.isAuthenticated is provided from the auth router
-// app.get("/", (req, res) => {
-//   res.send(req.oidc.isAuthenticated() ? "Logged in" : "Logged out");
-// });
-
-// //Login Page POST Request
-app.post("/login", async (req, res) => {
-  //Creating variables representing form values
-  let login = req.body.login;
-  let password = req.body.password;
-
-  //Creating a user object for a token
-  const user = { login: login };
-
-  //Checking the validity of given values
-  const re = new RegExp("[a-z]{3,}.[a-z]{2,}");
-
-  if (re.test(login) == false) {
-    return res
-      .status(400)
-      .json({ message: "Login jest nieprawidłowy", type: "Login" });
-  }
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: "Hasło jest za krótkie", type: "Password" });
-  }
-  if (password.length > 30) {
-    return res
-      .status(400)
-      .json({ message: "Hasło jest za długie", type: "Password" });
-  }
-
-  try {
-    const result = await client.query(
-      `SELECT * FROM public."user" WHERE login = \'${login}\'`
-    );
-    console.log(result.rows);
-    console.log(result.rows[0].role);
-    if (result.rows.length == 0) {
-      return res
-        .status(400)
-        .json({ message: "Użytkownik nie istnieje", type: "Login" });
-    } else {
-      bcrypt.compare(password, result.rows[0].password).then((response) => {
-        if (response) {
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-
-          res.status(200).json({
-            message: "Login successfull",
-            redirect: "/",
-            accessToken: accessToken,
-            roles: result.rows[0].role,
-          });
-        } else {
-          res.status(400).json({
-            message: "Hasło jest niepoprawne",
-            type: "Password",
-          });
-        }
-      });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-});
-
-//Register Page POST Request
-app.post("/register", async (req, res) => {
-  //Creating variables representing form values
-  let login = req.body.login;
-  let password = req.body.password;
-  let passwordConfirm = req.body.passwordConfirm;
-
-  //Creating a user object for a token
-  const user = { login: login };
-
-  //Checking the validity of given values
-  const re = new RegExp("[a-z]{3,}.[a-z]{2,}");
-
-  if (re.test(login) == false) {
-    return res
-      .status(400)
-      .json({ message: "Login jest nieprawidłowy", type: "Login" });
-  }
-  if (password.length < 6) {
-    return res
-      .status(400)
-      .json({ message: "Hasło jest za krótkie", type: "Password" });
-  }
-  if (password.length > 30) {
-    return res
-      .status(400)
-      .json({ message: "Hasło jest za długie", type: "Password" });
-  }
-
-  if (password != passwordConfirm) {
-    return res
-      .status(400)
-      .json({ message: "Hasła nie są identyczne", type: "PasswordConfirm" });
-  }
-
-  try {
-    const result = await client.query(
-      `SELECT * FROM public."user" WHERE login = \'${login}\'`
-    );
-    console.log(result.rows);
-    if (result.rows.length != 0) {
-      return res
-        .status(400)
-        .json({ message: "Użytkownik już istnieje", type: "Login" });
-    }
-  } catch (err) {
-    console.log(err);
-  }
-
-  bcrypt.hash(password, 10).then((hash) => {
-    //Making an insert query to the database with given values
-    client.query(
-      `INSERT INTO public.\"user\" (login, password) VALUES ('${login}', '${hash}')`,
-      (err, result) => {
-        if (err) {
-          console.log(err.message);
-          res.status(401).json({
-            message: "Utworzenie użytkownika nie powiodło się",
-            error: err.message,
-          });
-        } else if (result) {
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-          res.status(200).json({
-            message: "Utworzenie użytkownika powiodło się",
-            redirect: "/dashboard",
-            accessToken: accessToken,
-            roles: [1000],
-          });
-        }
-      }
-    );
-  });
-});
+app.post("/login", authController.handleLogin);
+app.post("/register", registerController.handleRegister);
 
 //Dashboard page GET request
 app.get("/dashboard", authenticateToken, async (req, res) => {
