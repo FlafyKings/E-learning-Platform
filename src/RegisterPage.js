@@ -2,17 +2,10 @@ import * as React from "react";
 import { useState } from "react";
 import { TextField } from "@mui/material";
 import "./Stylesheets/LoginPage.css";
-import {
-  Paper,
-  Button,
-  Box,
-  FormControlLabel,
-  Link,
-  Alert,
-} from "@mui/material";
-import axios from "./AxiosInterceptor.js";
+import { Paper, Button, Box, Link } from "@mui/material";
+import axios from "./api/axios";
 import useAuth from "./hooks/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   //Variables describing users credentials
@@ -21,13 +14,13 @@ function RegisterPage() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   //Variables describing alerts
-  const [alert, setAlert] = useState(false);
+  const [/*alert,*/ setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
-  const { auth, setAuth } = useAuth();
+  const { setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+  //const location = useLocation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();

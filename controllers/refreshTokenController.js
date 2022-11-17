@@ -14,7 +14,8 @@ const handleRefreshToken = async (req, res) => {
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.rows[0].login !== decoded.login)
       return res.sendStatus(403);
-    const roles = foundUser.rows[0].role;
+    const roles = [foundUser.rows[0].role];
+    console.log("REFRESH TOKEN CONTROLLER ROLES: ", roles);
     const accessToken = jwt.sign(
       {
         UserInfo: {

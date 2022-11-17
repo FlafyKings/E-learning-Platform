@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Stylesheets/LoginPage.css";
 import {
   Box,
@@ -10,9 +10,9 @@ import {
   FormControlLabel,
   TextField,
 } from "@mui/material";
-import axios from "./AxiosInterceptor.js";
+import axios from "./api/axios";
 import useAuth from "./hooks/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   //Variables describing users credentials
@@ -20,16 +20,16 @@ function LoginPage() {
   const [password, setPassword] = useState("");
 
   //Variables describing alerts
-  const [alert, setAlert] = useState(false);
+  const [/*alert,*/ setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
 
-  const { auth, setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth(); //deleted auth
   const navigate = useNavigate();
-  const location = useLocation();
+  //const location = useLocation();
 
-  const userRef = useRef();
-  const from = location.state?.from?.pathname || "/";
+  // const userRef = useRef();
+  // const from = location.state?.from?.pathname || "/";
 
   // const [accessToken, setAccessToken] = useState("");
   // const [roles, setRoles] = useState("");
@@ -61,7 +61,8 @@ function LoginPage() {
         // setAccessToken(response.data.accessToken);
         // setRoles([response.data.roles]);
         // console.log(roles, accessToken);
-        let roles = [response.data.roles];
+        let roles = response.data.roles;
+        console.log(roles);
         let accessToken = response.data.accessToken;
         setAuth({ login, password, roles, accessToken });
         navigate("/dashboard", true);
@@ -97,6 +98,14 @@ function LoginPage() {
         }
       });
   };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <Paper
@@ -144,8 +153,15 @@ function LoginPage() {
             size="small"
           />
           <FormControlLabel
-            control={<Checkbox size="small" />}
-            label="Zapamiętaj mnie"
+            control={
+              <Checkbox
+                size="small"
+                id="persist"
+                onChange={togglePersist}
+                checked={persist}
+              />
+            }
+            label="Zaufaj urządzeniu"
           />
         </Box>
 

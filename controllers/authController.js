@@ -40,6 +40,7 @@ const handleLogin = async (req, res) => {
       bcrypt.compare(password, result.rows[0].password).then((response) => {
         if (response) {
           const roles = [result.rows[0].role];
+          console.log("AUTH LOGIN ROLES: ", roles);
           const accessToken = jwt.sign(
             {
               UserInfo: {

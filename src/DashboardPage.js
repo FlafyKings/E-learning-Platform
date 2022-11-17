@@ -1,21 +1,20 @@
 import * as React from "react";
 import { useState } from "react";
-import { Checkbox } from "@mui/material";
-import { TextField } from "@mui/material";
 import "./Stylesheets/LoginPage.css";
-import { Paper, Button, Box, FormControlLabel } from "@mui/material";
-import axios from "./AxiosInterceptor.js";
-import { useContext } from "react";
-import AuthContext from "./context/AuthProvider";
+import { Button } from "@mui/material";
+import axios from "./api/axios";
 import Users from "./Users";
+import useLogout from "./hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 function DashboardPage() {
   const [result, setResult] = useState("");
-  const { auth, setAuth } = useContext(AuthContext);
+  const logout = useLogout();
+  const navigate = useNavigate();
 
-  const handleClick = (event) => {
-    localStorage.setItem("jwtToken", "");
-    window.location.replace("/login");
+  const signOut = async () => {
+    await logout();
+    navigate("/login");
   };
 
   axios
@@ -31,7 +30,7 @@ function DashboardPage() {
     <div>
       {" "}
       <Users></Users>
-      <Button onClick={handleClick} variant="contained">
+      <Button onClick={signOut} variant="contained">
         Wyloguj
       </Button>{" "}
       <h1>{result}</h1>{" "}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "./context/AuthProvider";
@@ -7,16 +7,13 @@ const RequireAuth = ({ allowedRoles }) => {
   const { auth } = useContext(AuthContext);
   const location = useLocation();
 
-  // useEffect(() => {
-  //   console.log("use:", auth);
-  // }, [auth]);
-
-  // console.log(auth.roles);
+  console.log("AUTH ROLES: ", auth.roles);
+  console.log("ALLOWED ROLES REQUIRE AUTH: ", allowedRoles);
   // console.log(auth);
   //debugger;
   return auth?.roles?.find((role) => {
     // THIS CHECKS ONLY ONE ROLE, CHANGE WHEN NEEDED
-    return role == allowedRoles[0];
+    return role === allowedRoles[0];
   }) ? (
     <Outlet />
   ) : auth?.login ? (
