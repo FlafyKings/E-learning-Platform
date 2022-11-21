@@ -8,6 +8,7 @@ const handleRegister = async (req, res) => {
   let login = req.body.login;
   let password = req.body.password;
   let passwordConfirm = req.body.passwordConfirm;
+  let newUser = true;
 
   //Creating a user object for a token
   const user = { login: login };
@@ -30,6 +31,9 @@ const handleRegister = async (req, res) => {
       .status(400)
       .json({ message: "Hasło jest za długie", type: "Password" });
   }
+
+  console.log("Passowrd: ", password);
+  console.log("Confirm Passowrd: ", passwordConfirm);
 
   if (password != passwordConfirm) {
     return res
@@ -63,12 +67,40 @@ const handleRegister = async (req, res) => {
             error: err.message,
           });
         } else if (result) {
-          const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+          const roles = ["1000"];
+          const accessToken = jwt.sign(
+            {
+              UserInfo: {
+                login: login,
+                roles: roles,
+              },
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "360s" }
+          );
+
+          const refreshToken = jwt.sign(
+            { login: login },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: "1d" }
+          );
+
+          const updateRefreshToken = client.query(
+            `UPDATE public."user" SET refresh_token = \'${refreshToken}\' WHERE login = \'${login}\'`
+          );
+
+          res.cookie("jwt", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None",
+            maxAge: 24 * 60 * 60 * 1000,
+          });
+
           res.status(200).json({
             message: "Utworzenie użytkownika powiodło się",
-            redirect: "/dashboard",
             accessToken: accessToken,
-            roles: [1000],
+            roles: roles,
+            newUser: newUser,
           });
         }
       }

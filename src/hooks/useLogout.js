@@ -2,7 +2,7 @@ import axios from "../api/axios";
 import useAuth from "./useAuth";
 
 const useLogout = () => {
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
 
   const logout = async () => {
     setAuth({});
@@ -14,7 +14,6 @@ const useLogout = () => {
       console.error(err);
     }
   };
-
   return logout;
 };
 

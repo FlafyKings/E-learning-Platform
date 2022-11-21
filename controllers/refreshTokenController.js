@@ -15,6 +15,7 @@ const handleRefreshToken = async (req, res) => {
     if (err || foundUser.rows[0].login !== decoded.login)
       return res.sendStatus(403);
     const roles = [foundUser.rows[0].role];
+    const login = decoded.login;
     console.log("REFRESH TOKEN CONTROLLER ROLES: ", roles);
     const accessToken = jwt.sign(
       {
@@ -26,7 +27,7 @@ const handleRefreshToken = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "10s" }
     );
-    res.json({ roles, accessToken });
+    res.json({ roles, accessToken, login });
   });
 };
 

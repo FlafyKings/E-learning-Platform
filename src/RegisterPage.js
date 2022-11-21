@@ -1,11 +1,19 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TextField } from "@mui/material";
 import "./Stylesheets/LoginPage.css";
-import { Paper, Button, Box, Link } from "@mui/material";
+import {
+  Paper,
+  Button,
+  Box,
+  Link,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 import axios from "./api/axios";
 import useAuth from "./hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import PopUpForm from "./PopUpForm";
 
 function RegisterPage() {
   //Variables describing users credentials
@@ -14,11 +22,11 @@ function RegisterPage() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
   //Variables describing alerts
-  const [/*alert,*/ setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [newUser, setNewUser] = useState(false);
 
-  const { setAuth } = useAuth();
+  const { setAuth, persist, setPersist } = useAuth();
   const navigate = useNavigate();
   //const location = useLocation();
 
@@ -30,18 +38,20 @@ function RegisterPage() {
     console.log(passwordConfirm);
 
     await axios
-      .post("/register", {
-        login: login,
-        password: password,
-        passwordConfirm: passwordConfirm,
+      .post("/register", JSON.stringify({ login, password, passwordConfirm }), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
       })
       .then((response) => {
-        localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
-
-        let roles = [response.data.roles];
+        let roles = response.data.roles;
         let accessToken = response.data.accessToken;
-        setAuth({ login, password, roles, accessToken });
-        navigate("/dashboard", true);
+        if (response.data.newUser) {
+          setNewUser(response.data.newUser);
+        }
+        console.log("new user iosjfdhoijdsgh", newUser, response.data.newUser);
+        setAuth({ login, password, roles, accessToken, newUser });
+
+        //navigate("/dashboard", true);
       })
       .catch((error) => {
         //Error handling
@@ -58,7 +68,6 @@ function RegisterPage() {
             setAlertType(error.response.data.type);
           }
 
-          setAlert(true);
           setAlertMessage(error.response.data.message);
 
           console.log(error.response.data);
@@ -74,6 +83,14 @@ function RegisterPage() {
         }
       });
   };
+
+  const togglePersist = () => {
+    setPersist((prev) => !prev);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("persist", persist);
+  }, [persist]);
 
   return (
     <Paper
@@ -97,7 +114,8 @@ function RegisterPage() {
           onChange={(event) => setLogin(event.target.value)}
           value={login}
           required
-          autofocus
+          autoFocus
+          autoComplete="off"
           label="Login"
           name="login"
           id="login"
@@ -107,7 +125,7 @@ function RegisterPage() {
         />
 
         <Box
-          sx={{ mr: 5, ml: 5, mb: 7 }}
+          sx={{ mr: 5, ml: 5, mb: 1 }}
           display="flex"
           justifyContent="space-between"
           gap={3}
@@ -139,6 +157,24 @@ function RegisterPage() {
             size="small"
           />
         </Box>
+        <Box
+          sx={{ mr: 5, ml: 5, mb: -0.2, mt: -4.5 }}
+          display="flex"
+          justifyContent="space-between"
+          gap={5}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                size="small"
+                id="persist"
+                onChange={togglePersist}
+                checked={persist}
+              />
+            }
+            label="Zaufaj urządzeniu"
+          />
+        </Box>
 
         <Box
           sx={{ mr: 5, ml: 5, mb: 7 }}
@@ -159,6 +195,7 @@ function RegisterPage() {
           </Button>
         </Box>
       </Box>
+      {newUser ? <PopUpForm></PopUpForm> : <></>}
     </Paper>
   );
 }

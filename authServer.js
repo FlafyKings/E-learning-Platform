@@ -17,6 +17,7 @@ const authController = require("./controllers/authController");
 const registerController = require("./controllers/registerController");
 const refreshTokenController = require("./controllers/refreshTokenController");
 const logoutController = require("./controllers/logoutController");
+const popupformController = require("./controllers/popUpFormController");
 
 const jwt = require("jsonwebtoken");
 const { auth } = require("express-openid-connect");
@@ -39,41 +40,14 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-// function authenticateToken(req, res, next) {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-
-//   if (token == null) {
-//     return res.status(401);
-//   }
-
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-//     if (err) {
-//       return res.status(403).json({ message: "Token is invalid" });
-//     }
-//     req.user = user;
-//     next();
-//   });
-// }
-
 //Dashboard page GET request
-app.get("/dashboard", async (req, res) => {
-  //Creating a query for getting all the info needed for dashboard
-  // try {
-  //   const result = await client.query(
-  //     `SELECT login FROM public."user" WHERE login = '${req.user.login}'`
-  //   );
-  //   console.log(result.rows[0]);
-  //   res.json(result.rows[0]);
-  // } catch (err) {
-  //   console.log(err);
-  // }
-});
+app.get("/dashboard", async (req, res) => {});
 
 app.post("/login", authController.handleLogin);
 app.post("/register", registerController.handleRegister);
 app.get("/refresh", refreshTokenController.handleRefreshToken);
-router.get("/logout", logoutController.handleLogout);
+app.get("/logout", logoutController.handleLogout);
+app.post("/popupform", popupformController.handlePopUpForm);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));

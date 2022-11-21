@@ -6,6 +6,7 @@ const handleLogin = async (req, res) => {
   //Creating variables representing form values
   let login = req.body.login;
   let password = req.body.password;
+  let newUser = false;
 
   //Checking the validity of given values
   const re = new RegExp("[a-z]{3,}.[a-z]{2,}");
@@ -49,8 +50,12 @@ const handleLogin = async (req, res) => {
               },
             },
             process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "10s" }
+            { expiresIn: "360s" }
           );
+          console.log("authcontroller:", !result.rows[0].first_name);
+          if (!result.rows[0].first_name) {
+            newUser = true;
+          }
 
           const refreshToken = jwt.sign(
             { login: login },
@@ -73,6 +78,7 @@ const handleLogin = async (req, res) => {
             message: "Login successfull",
             accessToken: accessToken,
             roles: roles,
+            newUser: newUser,
           });
         } else {
           res.status(400).json({

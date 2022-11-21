@@ -1,0 +1,94 @@
+Date : 2022-11-20 21:01:13
+Directory : c:\Users\kamil\Documents\GitHub\LepszyUPEL
+Total : 52 files,  43929 codes, 66 comments, 292 blanks, all 44287 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          2 |     42,256 |          0 |          2 |     42,258 |
+| JavaScript |         42 |      1,575 |         59 |        237 |      1,871 |
+| Markdown   |          1 |         38 |          0 |         33 |         71 |
+| HTML       |          2 |         26 |          0 |          4 |         30 |
+| CSS        |          3 |         21 |          5 |          9 |         35 |
+| HTTP       |          1 |         11 |          2 |          7 |         20 |
+| Properties |          1 |          2 |          0 |          0 |          2 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                |         52 |     43,929 |         66 |        292 |     44,287 |
+| config                                                                           |          4 |         29 |          5 |          9 |         43 |
+| controllers                                                                      |          6 |        327 |         17 |         47 |        391 |
+| middleware                                                                       |          4 |         70 |          0 |         16 |         86 |
+| public                                                                           |          1 |         13 |          0 |          2 |         15 |
+| routes                                                                           |          1 |         12 |          0 |          4 |         16 |
+| routes\api                                                                       |          1 |         12 |          0 |          4 |         16 |
+| src                                                                              |         29 |      1,110 |         36 |        155 |      1,301 |
+| src\Stylesheets                                                                  |          3 |         21 |          5 |          9 |         35 |
+| src\api                                                                          |          1 |         10 |          0 |          3 |         13 |
+| src\context                                                                      |          1 |         21 |          0 |          5 |         26 |
+| src\hooks                                                                        |          4 |         87 |          0 |         19 |        106 |
+| views                                                                            |          1 |         13 |          0 |          2 |         15 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                         | language   | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\.env                                  | Properties |          2 |          0 |          0 |          2 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\README.md                             | Markdown   |         38 |          0 |         33 |         71 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\authServer.js                         | JavaScript |         48 |          6 |         15 |         69 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\config\allowedOrigins.js              | JavaScript |          2 |          0 |          2 |          4 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\config\corsOptions.js                 | JavaScript |         13 |          0 |          3 |         16 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\config\database.js                    | JavaScript |          9 |          5 |          2 |         16 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\config\rolesList.js                   | JavaScript |          5 |          0 |          2 |          7 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\authController.js         | JavaScript |         84 |          3 |         10 |         97 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\logoutController.js       | JavaScript |         23 |          3 |          5 |         31 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\popUpFormController.js    | JavaScript |         55 |          3 |          9 |         67 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\refreshTokenController.js | JavaScript |         30 |          1 |          4 |         35 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\registerController.js     | JavaScript |         93 |          5 |         14 |        112 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\controllers\usersController.js        | JavaScript |         42 |          2 |          5 |         49 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\middleware\credentials.js             | JavaScript |          9 |          0 |          3 |         12 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\middleware\logEvents.js               | JavaScript |         26 |          0 |          7 |         33 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\middleware\verifyJWT.js               | JavaScript |         18 |          0 |          4 |         22 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\middleware\verifyRoles.js             | JavaScript |         17 |          0 |          2 |         19 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\package-lock.json                     | JSON       |     42,193 |          0 |          1 |     42,194 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\package.json                          | JSON       |         63 |          0 |          1 |         64 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\public\index.html                     | HTML       |         13 |          0 |          2 |         15 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\request.rest                          | HTTP       |         11 |          2 |          7 |         20 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\routes\api\users.js                   | JavaScript |         12 |          0 |          4 |         16 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\App.js                            | JavaScript |         43 |          0 |          5 |         48 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\ChatPage.js                       | JavaScript |         11 |          0 |          3 |         14 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\DashboardPage.js                  | JavaScript |         38 |          0 |          5 |         43 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\GroupBoardPage.js                 | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\HeaderBar.js                      | JavaScript |        193 |          0 |         12 |        205 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\HomeworkPage.js                   | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\Layout.js                         | JavaScript |         17 |          0 |          3 |         20 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\LoginPage.js                      | JavaScript |        150 |          9 |         14 |        173 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\MailPage.js                       | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\MissingPage.js                    | JavaScript |         14 |          0 |          3 |         17 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\OwnProfilePage.js                 | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\PersistLogin.js                   | JavaScript |         32 |          1 |          9 |         42 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\PopUpForm.js                      | JavaScript |        159 |          6 |         12 |        177 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\RegisterPage.js                   | JavaScript |        175 |          7 |         16 |        198 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\RequireAuth.js                    | JavaScript |         18 |          3 |          4 |         25 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\Stylesheets\LoginForm.css         | CSS        |          0 |          0 |          1 |          1 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\Stylesheets\LoginPage.css         | CSS        |         10 |          5 |          5 |         20 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\Stylesheets\index.css             | CSS        |         11 |          0 |          3 |         14 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\TestPage.js                       | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\UnauthorizedPage.js               | JavaScript |         27 |          0 |          6 |         33 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\UserProfilePage.js                | JavaScript |          5 |          0 |          3 |          8 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\Users.js                          | JavaScript |         49 |          0 |          8 |         57 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\api\axios.js                      | JavaScript |         10 |          0 |          3 |         13 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\context\AuthProvider.js           | JavaScript |         21 |          0 |          5 |         26 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\hooks\useAuth.js                  | JavaScript |          8 |          0 |          3 |         11 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\hooks\useAxiosPrivate.js          | JavaScript |         38 |          0 |          7 |         45 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\hooks\useLogout.js                | JavaScript |         17 |          0 |          5 |         22 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\hooks\useRefreshToken.js          | JavaScript |         24 |          0 |          4 |         28 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\src\index.js                          | JavaScript |         15 |          5 |          1 |         21 |
+| c:\Users\kamil\Documents\GitHub\LepszyUPEL\views\404.html                        | HTML       |         13 |          0 |          2 |         15 |
+| Total                                                                            |            |     43,929 |         66 |        292 |     44,287 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import "./Stylesheets/LoginPage.css";
-import { Button } from "@mui/material";
+import { Button, Link } from "@mui/material";
 import axios from "./api/axios";
 import Users from "./Users";
 import useLogout from "./hooks/useLogout";
@@ -30,6 +30,7 @@ function DashboardPage() {
     <div>
       {" "}
       <Users></Users>
+      <Link href="/chat">Chat</Link>
       <Button onClick={signOut} variant="contained">
         Wyloguj
       </Button>{" "}

@@ -1,10 +1,15 @@
 import * as React from "react";
 import { Button } from "@mui/material";
+import useLogout from "./hooks/useLogout";
+import { useNavigate } from "react-router-dom";
 
 function UnauthorizedPage() {
-  const handleClick = (event) => {
-    localStorage.setItem("jwtToken", "");
-    window.location.replace("/login");
+  const logout = useLogout();
+  const navigate = useNavigate();
+
+  const signOut = async () => {
+    await logout();
+    navigate("/login");
   };
 
   const handleReturn = (event) => {
@@ -14,7 +19,7 @@ function UnauthorizedPage() {
   return (
     <div>
       <h1>Nieautoryzowany dostęp</h1>
-      <Button onClick={handleClick} variant="contained">
+      <Button onClick={signOut} variant="contained">
         Wyloguj
       </Button>
       <Button onClick={handleReturn} variant="contained">

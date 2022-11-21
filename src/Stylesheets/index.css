@@ -1,8 +1,13 @@
-body{
-    font-family: "Roboto", Roboto;
+body {
+  font-family: "Roboto", Roboto;
+  margin: 0;
 }
 
-#root{
-    width: 100%;
-    height: 100%;
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+header button:hover {
+  background-color: #8fa5f2 !important;
 }

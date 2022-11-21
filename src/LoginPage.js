@@ -13,6 +13,7 @@ import {
 import axios from "./api/axios";
 import useAuth from "./hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import PopUpForm from "./PopUpForm";
 
 function LoginPage() {
   //Variables describing users credentials
@@ -20,33 +21,13 @@ function LoginPage() {
   const [password, setPassword] = useState("");
 
   //Variables describing alerts
-  const [/*alert,*/ setAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
   const [alertType, setAlertType] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [newUser, setNewUser] = useState(false);
 
   const { setAuth, persist, setPersist } = useAuth(); //deleted auth
   const navigate = useNavigate();
-  //const location = useLocation();
-
-  // const userRef = useRef();
-  // const from = location.state?.from?.pathname || "/";
-
-  // const [accessToken, setAccessToken] = useState("");
-  // const [roles, setRoles] = useState("");
-
-  // useEffect(() => {
-  //   userRef.current.focus();
-  // }, []);
-
-  // useEffect(() => {
-  //   if (isInitialMount.current) {
-  //     isInitialMount.current = false;
-  //   } else {
-  //     setLogin("");
-  //     setPassword("");
-  //     setLogged(true);
-  //   }
-  // }, [auth]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -57,15 +38,21 @@ function LoginPage() {
         withCredentials: true,
       })
       .then((response) => {
-        //localStorage.setItem("jwtToken", response.data.accessToken); //not safe at all but we dont have https so w/e
         // setAccessToken(response.data.accessToken);
         // setRoles([response.data.roles]);
         // console.log(roles, accessToken);
         let roles = response.data.roles;
         console.log(roles);
         let accessToken = response.data.accessToken;
-        setAuth({ login, password, roles, accessToken });
-        navigate("/dashboard", true);
+
+        console.log("response User: ", response.data.newUser);
+        if (response.data.newUser) {
+          setNewUser(true);
+          setAuth({ login, password, roles, accessToken, newUser });
+        } else {
+          setAuth({ login, password, roles, accessToken, newUser });
+          navigate("/dashboard", true);
+        }
       })
       .catch((error) => {
         //Error handling
@@ -130,6 +117,7 @@ function LoginPage() {
           value={login}
           required
           autoFocus
+          autoComplete="off"
           label="Login"
           name="login"
           id="login"
@@ -139,6 +127,7 @@ function LoginPage() {
         />
         <Box sx={{ mr: 5, ml: 5 }}>
           <TextField
+            sx={{ mb: 1 }}
             helperText={alertType === "Password" ? alertMessage : ""}
             error={alertType === "Password" ? alertMessage : ""}
             onChange={(event) => setPassword(event.target.value)}
@@ -184,6 +173,7 @@ function LoginPage() {
           </Button>
         </Box>
       </Box>
+      {newUser ? <PopUpForm></PopUpForm> : <></>}
     </Paper>
   );
 }

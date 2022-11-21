@@ -10,7 +10,6 @@ const Users = () => {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
-  const refresh = useRefreshToken();
 
   useEffect(() => {
     let isMounted = true;
@@ -19,6 +18,7 @@ const Users = () => {
     const getUsers = async () => {
       try {
         console.log("test");
+
         const response = await axiosPrivate.get("/users", {
           signal: controller.signal,
         });
@@ -50,7 +50,6 @@ const Users = () => {
       ) : (
         <p>No users to display</p>
       )}
-      <Button onClick={() => refresh()}>Refresh</Button>
     </article>
   );
 };
