@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS public."user"
     email character varying(40) COLLATE pg_catalog."default",
     role bigint NOT NULL DEFAULT 1000,
     refresh_token character varying(400) COLLATE pg_catalog."default",
+    birth_date date,
+    study_field character varying(100) COLLATE pg_catalog."default",
     CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 
@@ -19,3 +21,218 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."user"
     OWNER to postgres;
+
+--------------------------------------------------------------------------------------------------------------------------
+
+-- Table: public.test
+
+-- DROP TABLE IF EXISTS public.test;
+
+CREATE TABLE IF NOT EXISTS public.test
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    owner_id bigint NOT NULL,
+    "time" bigint NOT NULL,
+    CONSTRAINT test_pkey PRIMARY KEY (id),
+    CONSTRAINT user_pkey FOREIGN KEY (owner_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.test
+    OWNER to postgres;
+
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+    -- Table: public.studentsGroup
+
+-- DROP TABLE IF EXISTS public."studentsGroup";
+
+CREATE TABLE IF NOT EXISTS public."studentsGroup"
+(
+    group_id bigint,
+    students_id bigint,
+    CONSTRAINT group_id FOREIGN KEY (group_id)
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT student_id FOREIGN KEY (students_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."studentsGroup"
+    OWNER to postgres;
+
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+-- Table: public.questionTest
+
+-- DROP TABLE IF EXISTS public."questionTest";
+
+CREATE TABLE IF NOT EXISTS public."questionTest"
+(
+    test_id bigint NOT NULL,
+    question_id bigint NOT NULL,
+    CONSTRAINT question_id FOREIGN KEY (question_id)
+        REFERENCES public.question (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT test_id FOREIGN KEY (test_id)
+        REFERENCES public.test (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."questionTest"
+    OWNER to postgres;
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+-- Table: public.question
+
+-- DROP TABLE IF EXISTS public.question;
+
+CREATE TABLE IF NOT EXISTS public.question
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    description character varying(400) COLLATE pg_catalog."default" NOT NULL,
+    answer_1 character varying(150) COLLATE pg_catalog."default",
+    answer_2 character varying(150) COLLATE pg_catalog."default",
+    answer_3 character varying(150) COLLATE pg_catalog."default",
+    answer_4 character varying(150) COLLATE pg_catalog."default",
+    correct_1 bigint,
+    correct_2 bigint,
+    correct_3 bigint,
+    correct_4 bigint,
+    CONSTRAINT question_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.question
+    OWNER to postgres;
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+-- Table: public.presence
+
+-- DROP TABLE IF EXISTS public.presence;
+
+CREATE TABLE IF NOT EXISTS public.presence
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    group_id bigint NOT NULL,
+    student_id bigint NOT NULL,
+    date date NOT NULL,
+    CONSTRAINT presence_pkey PRIMARY KEY (id),
+    CONSTRAINT group_fkey FOREIGN KEY (group_id)
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT student_fkey FOREIGN KEY (student_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.presence
+    OWNER to postgres;
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+-- Table: public.group
+
+-- DROP TABLE IF EXISTS public."group";
+
+CREATE TABLE IF NOT EXISTS public."group"
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    name character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    owner_id bigint NOT NULL,
+    tests_id bigint[],
+    homework_id bigint[],
+    CONSTRAINT group_pkey PRIMARY KEY (id),
+    CONSTRAINT owner_fkey FOREIGN KEY (owner_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."group"
+    OWNER to postgres;
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+    -- Table: public.grades
+
+-- DROP TABLE IF EXISTS public.grades;
+
+CREATE TABLE IF NOT EXISTS public.grades
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    student_id bigint NOT NULL,
+    group_id bigint NOT NULL,
+    date date NOT NULL,
+    score bigint NOT NULL,
+    CONSTRAINT grades_pkey PRIMARY KEY (id),
+    CONSTRAINT group_fkey FOREIGN KEY (group_id)
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT student_fkey FOREIGN KEY (student_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.grades
+    OWNER to postgres;
+
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+    --------------------------------------------------------------------------------------------------------------------------
