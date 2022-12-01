@@ -13,6 +13,9 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import useAuth from "./hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import useLogout from "./hooks/useLogout";
+import { AtmSharp } from "@mui/icons-material";
 
 const pages = ["Pulpit", "Grupy", "Dziennik", "Poczta", "Chat"];
 const settings = ["Profil", "Ustawienia", "Wyloguj"];
@@ -20,7 +23,8 @@ const settings = ["Profil", "Ustawienia", "Wyloguj"];
 const HeaderBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
+  const navigate = useNavigate();
+  const logout = useLogout();
   const { auth } = useAuth();
 
   const handleOpenNavMenu = (event) => {
@@ -36,6 +40,15 @@ const HeaderBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const openProfile = () => {
+    navigate("/profile/" + auth.login);
+  };
+
+  const signOut = async () => {
+    await logout();
+    navigate("/login");
   };
 
   var dict = {
@@ -188,11 +201,15 @@ const HeaderBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Button variant="text">{setting}</Button>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={openProfile}>
+                <Button variant="text">Profil</Button>
+              </MenuItem>
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Button variant="text">Ustawienia</Button>
+              </MenuItem>
+              <MenuItem onClick={signOut}>
+                <Button variant="text">Wyloguj</Button>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

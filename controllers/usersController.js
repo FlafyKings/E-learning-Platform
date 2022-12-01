@@ -36,9 +36,9 @@ const getUser = async (req, res) => {
   if (!user) {
     return res
       .status(204)
-      .json({ message: `User login ${req.params.id} not found` });
+      .json({ message: `User login ${req.params.login} not found` });
   }
-  res.json(user);
+  res.json(user.rows[0]);
 };
 
 module.exports = {

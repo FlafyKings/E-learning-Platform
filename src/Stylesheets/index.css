@@ -1,6 +1,8 @@
 body {
   font-family: "Roboto", Roboto;
   margin: 0;
+  overflow-x: hidden;
+  background-color: #e2e6f8;
 }
 
 #root {
@@ -10,4 +12,29 @@ body {
 
 header button:hover {
   background-color: #8fa5f2 !important;
+}
+
+.groupTableHover:hover {
+  background-color: rgba(230, 217, 217, 0.432);
+  cursor: pointer;
+}
+
+.creatorCheckbox {
+  margin-top: 13px !important;
+}
+
+.creatorTextField > *::before {
+  border-bottom: none !important;
+}
+
+.deleteIconQuestion {
+  position: relative;
+  left: 90%;
+  bottom: 90%;
+}
+
+.addQuestionButton {
+  position: sticky;
+  bottom: 90%;
+  left: 10%;
 }

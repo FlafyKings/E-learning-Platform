@@ -17,12 +17,9 @@ const Users = () => {
 
     const getUsers = async () => {
       try {
-        console.log("test");
-
         const response = await axiosPrivate.get("/users", {
           signal: controller.signal,
         });
-        console.log(response.data);
         isMounted && setUsers(response.data);
       } catch (err) {
         console.error(err);
@@ -48,7 +45,7 @@ const Users = () => {
           ))}
         </ul>
       ) : (
-        <p>No users to display</p>
+        <p>Brak użytkowników do wyświetlenia</p>
       )}
     </article>
   );

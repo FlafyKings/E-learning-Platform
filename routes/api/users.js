@@ -4,11 +4,16 @@ const usersController = require("../../controllers/usersController");
 const rolesList = require("../../config/rolesList");
 const verifyRoles = require("../../middleware/verifyRoles");
 
-console.log("ALLOWED ROLES: ", rolesList.Student);
 router
   .route("/")
-  .get(verifyRoles(rolesList.Student), usersController.getAllUsers)
-  .delete(verifyRoles(rolesList.Student), usersController.deleteUser);
+  .get(
+    verifyRoles(rolesList.Student, rolesList.Teacher),
+    usersController.getAllUsers
+  )
+  .delete(
+    verifyRoles(rolesList.Student, rolesList.Teacher),
+    usersController.deleteUser
+  );
 
 router.route("/:id").get(verifyRoles(rolesList.Admin), usersController.getUser);
 

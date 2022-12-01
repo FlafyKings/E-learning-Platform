@@ -44,8 +44,7 @@ function LoginPage() {
         let roles = response.data.roles;
         console.log(roles);
         let accessToken = response.data.accessToken;
-
-        console.log("response User: ", response.data.newUser);
+        localStorage.setItem("login", login);
         if (response.data.newUser) {
           setNewUser(true);
           setAuth({ login, password, roles, accessToken, newUser });

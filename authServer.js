@@ -51,6 +51,9 @@ app.post("/popupform", popupformController.handlePopUpForm);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));
+app.use("/profile", require("./routes/api/profile"));
+app.use("/group", require("./routes/api/group"));
+app.use("/test", require("./routes/api/test"));
 
 app.all("*", (req, res) => {
   res.status(404);

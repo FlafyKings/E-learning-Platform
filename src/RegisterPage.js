@@ -45,6 +45,7 @@ function RegisterPage() {
       .then((response) => {
         let roles = response.data.roles;
         let accessToken = response.data.accessToken;
+        localStorage.setItem("login", login);
         if (response.data.newUser) {
           setNewUser(response.data.newUser);
         }

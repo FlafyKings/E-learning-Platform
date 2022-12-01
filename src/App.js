@@ -9,6 +9,11 @@ import PersistLogin from "./PersistLogin";
 import MissingPage from "./MissingPage";
 import UnauthorizedPage from "./UnauthorizedPage";
 import ChatPage from "./ChatPage";
+import Profile from "./Profile";
+import GroupsBoardPage from "./GroupsBoardPage";
+import GroupPage from "./GroupPage";
+import TestPage from "./TestPage";
+import TestCreator from "./TestCreator";
 
 const ROLES = {
   Student: "1000",
@@ -25,8 +30,23 @@ const App = () => {
         <Route path="unauthorized" element={<UnauthorizedPage />} />
         {/*<Route path="/dashboard" element={<DashboardPage />} />*/}
         <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[ROLES.Student]} />}>
+          <Route
+            element={
+              <RequireAuth allowedRoles={[ROLES.Student, , ROLES.Teacher]} />
+            }
+          >
             <Route path="/dashboard" element={<DashboardPage />} />
+          </Route>
+          <Route
+            element={
+              <RequireAuth allowedRoles={[ROLES.Student, ROLES.Teacher]} />
+            }
+          >
+            <Route path="/chat" element={<ChatPage />} />
+          </Route>
+
+          <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
+            <Route path="/testCreator" element={<TestCreator />}></Route>
           </Route>
 
           <Route
@@ -34,7 +54,12 @@ const App = () => {
               <RequireAuth allowedRoles={[ROLES.Student, ROLES.Teacher]} />
             }
           >
-            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/profile">
+              <Route path=":login" element={<Profile />} />
+            </Route>
+            <Route path="/groups/:group" element={<GroupPage />}></Route>
+            <Route path="/groups" element={<GroupsBoardPage />} />
+            <Route path="/test/:id" element={<TestPage />} />
           </Route>
         </Route>
         {/*Missing Pages*/}

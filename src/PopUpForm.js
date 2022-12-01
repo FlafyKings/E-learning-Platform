@@ -113,6 +113,8 @@ const PopUpForm = () => {
               id="name"
               label="Imię"
               type="firstname"
+              helperText={alertType === "firstname" ? alertMessage : ""}
+              error={alertType === "firstname" ? alertMessage : ""}
               onChange={(event) => setFirstname(event.target.value)}
               value={firstname}
               fullWidth
@@ -123,6 +125,8 @@ const PopUpForm = () => {
               margin="dense"
               id="name"
               type="lastname"
+              helperText={alertType === "lastname" ? alertMessage : ""}
+              error={alertType === "lastname" ? alertMessage : ""}
               label="Nazwisko"
               fullWidth
               onChange={(event) => setLastname(event.target.value)}
@@ -136,6 +140,8 @@ const PopUpForm = () => {
             id="name"
             label="Adres e-mail"
             type="email"
+            helperText={alertType === "email" ? alertMessage : ""}
+            error={alertType === "email" ? alertMessage : ""}
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
             value={email}

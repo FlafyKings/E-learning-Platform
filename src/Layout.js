@@ -3,6 +3,7 @@ import React from "react";
 import useAuth from "./hooks/useAuth";
 import HeaderBar from "./HeaderBar";
 import PopUpForm from "./PopUpForm";
+import Loading from "./Loading";
 
 const Layout = () => {
   const { auth } = useAuth();
