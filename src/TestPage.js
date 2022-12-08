@@ -2,6 +2,7 @@ import { useState, useEffect, useStyles } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import React from "react";
+import TestStartPopUp from "./TestStartPopUp";
 import {
   Button,
   Divider,
@@ -88,9 +89,12 @@ const TestPage = () => {
         mt: 7,
       }}
     >
+      <TestStartPopUp></TestStartPopUp>
       {testName ? (
         <>
-          <Typography variant="h5">{testName}</Typography>
+          <Typography sx={{ color: "rgba(0, 0, 0, 0.6)" }} variant="h5">
+            {testName}
+          </Typography>
           <Divider sx={{ width: "100%", mb: 2, mt: 2 }}></Divider>
 
           {test.map((row, i) => (
@@ -104,7 +108,9 @@ const TestPage = () => {
                 mb: 3,
               }}
             >
-              <Typography sx={{ mb: 2.5, fontWeight: 500 }}>
+              <Typography
+                sx={{ mb: 2.5, fontWeight: 500, color: "rgba(0, 0, 0, 0.6)" }}
+              >
                 {i + 1}. {row.description}
               </Typography>
               {row.array.length != 0 ? (
@@ -113,6 +119,7 @@ const TestPage = () => {
                     <FormControlLabel
                       control={<Checkbox name="1" />}
                       label={x}
+                      sx={{ color: "rgba(0, 0, 0, 0.6)" }}
                     />
                   ))}
                 </FormGroup>
@@ -122,6 +129,7 @@ const TestPage = () => {
                   variant="standard"
                   multiline
                   fullWidth
+                  sx={{ color: "rgba(0, 0, 0, 0.6)" }}
                 ></TextField>
               )}
             </Card>

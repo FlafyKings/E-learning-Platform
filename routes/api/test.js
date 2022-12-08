@@ -10,7 +10,17 @@ router
     verifyRoles(rolesList.Student, rolesList.Teacher),
     testController.getTest
   );
+
 //.delete(verifyRoles(rolesList.Student), groupController.deleteGroup);
+
+router.route("/").post(verifyRoles(rolesList.Teacher), testController.addTest);
+
+router
+  .route("/:group")
+  .get(
+    verifyRoles(rolesList.Teacher, rolesList.Student),
+    testController.getGroupsTests
+  );
 
 router
   .route("/:test")

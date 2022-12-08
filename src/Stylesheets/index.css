@@ -38,3 +38,13 @@ header button:hover {
   bottom: 90%;
   left: 10%;
 }
+
+.displayNone {
+  display: none !important;
+}
+
+.shortTableCell {
+  max-width: 60px !important;
+  padding-right: 0;
+  padding-left: 0;
+}

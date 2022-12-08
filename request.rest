@@ -15,5 +15,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/posts
-Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiaWdhLnN6b3JkeWtvd3NrYSIsImlhdCI6MTY2MTExOTU3OX0.od-9W5j-HqIxnSe_Pz2XB9wrgZDZHWwTPCbU1Blococ
+POST http://localhost:8080/test
+Authorization: BEARER eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySW5mbyI6eyJsb2dpbiI6ImZsYWZ5cyIsInJvbGVzIjpbIjIwMDAiXX0sImlhdCI6MTY3MDA5NzQ1NSwiZXhwIjoxNjcwMDk3ODE1fQ.pKZHFofxUSiCNHcCePkEK-fdECL-msmElUJCRXyiuV4
+headers: { "Content-Type": "application/json" }
+withCredentials: true,

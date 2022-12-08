@@ -24,11 +24,36 @@ function a11yProps(index) {
   };
 }
 
-const QuestionCreator = ({ listId, setItem }) => {
+const QuestionCreator = ({
+  listId,
+  setItem,
+  inputs,
+  setInputs,
+  handleChange,
+}) => {
   const [value, setValue] = React.useState(0);
+  const [isActive, setIsActive] = React.useState("");
 
-  const handleChange = (event, newValue) => {
+  const questionName = "question" + listId;
+  const answerName1 = "answer1" + listId;
+  const answerName2 = "answer2" + listId;
+  const answerName3 = "answer3" + listId;
+  const answerName4 = "answer4" + listId;
+
+  const handleChangeOfPanel = (event, newValue) => {
     setValue(newValue);
+    setInputs((values) => ({
+      ...values,
+      [answerName1]: "",
+      [answerName2]: "",
+      [answerName3]: "",
+      [answerName4]: "",
+    }));
+  };
+
+  const deleteQuestion = () => {
+    setItem(listId);
+    setIsActive("displayNone");
   };
 
   return (
@@ -42,10 +67,11 @@ const QuestionCreator = ({ listId, setItem }) => {
         mt: 2,
         mb: 3,
       }}
+      className={isActive}
     >
       <Tabs
         value={value}
-        onChange={handleChange}
+        onChange={handleChangeOfPanel}
         aria-label="basic tabs example"
         variant="fullWidth"
       >
@@ -55,6 +81,10 @@ const QuestionCreator = ({ listId, setItem }) => {
       <TextField
         fullWidth
         placeholder="Dodaj pytanie"
+        required
+        name={questionName}
+        value={inputs.questionName}
+        onChange={handleChange}
         label="Pytanie"
         variant="standard"
         sx={{ mb: 2 }}
@@ -68,6 +98,9 @@ const QuestionCreator = ({ listId, setItem }) => {
               <TextField
                 className="creatorTextField"
                 label="Odpowiedź"
+                name={answerName1}
+                value={inputs.answerName1}
+                onChange={handleChange}
                 variant="standard"
               ></TextField>
             }
@@ -79,6 +112,9 @@ const QuestionCreator = ({ listId, setItem }) => {
               <TextField
                 className="creatorTextField"
                 label="Odpowiedź"
+                name={answerName2}
+                value={inputs.answerName2}
+                onChange={handleChange}
                 variant="standard"
               ></TextField>
             }
@@ -90,6 +126,9 @@ const QuestionCreator = ({ listId, setItem }) => {
               <TextField
                 className="creatorTextField"
                 label="Odpowiedź"
+                name={answerName3}
+                value={inputs.answerName3}
+                onChange={handleChange}
                 variant="standard"
               ></TextField>
             }
@@ -101,6 +140,9 @@ const QuestionCreator = ({ listId, setItem }) => {
               <TextField
                 className="creatorTextField"
                 label="Odpowiedź"
+                name={answerName4}
+                value={inputs.answerName4}
+                onChange={handleChange}
                 variant="standard"
               ></TextField>
             }
@@ -113,7 +155,7 @@ const QuestionCreator = ({ listId, setItem }) => {
           <IconButton
             sx={{ ml: "auto", mr: 1 }}
             className="deleteIconQuestion"
-            onClick={() => setItem(listId)}
+            onClick={deleteQuestion}
           >
             <DeleteIcon fontSize="medium" color="error" />
           </IconButton>

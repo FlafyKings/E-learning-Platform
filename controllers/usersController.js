@@ -1,7 +1,16 @@
 const client = require("../config/database");
+const format = require("pg-format");
 
 const getAllUsers = async (req, res) => {
   const users = await client.query(`SELECT * FROM public."user" `);
+  if (!users) return res.status(204).json({ message: "No users found" });
+  res.json(users.rows);
+};
+
+const getAllTeachers = async (req, res) => {
+  const users = await client.query(
+    `SELECT id, login, first_name, last_name FROM public."user" where role = '2000' `
+  );
   if (!users) return res.status(204).json({ message: "No users found" });
   res.json(users.rows);
 };
@@ -45,4 +54,5 @@ module.exports = {
   getAllUsers,
   deleteUser,
   getUser,
+  getAllTeachers,
 };

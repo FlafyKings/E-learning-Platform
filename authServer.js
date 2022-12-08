@@ -18,6 +18,7 @@ const registerController = require("./controllers/registerController");
 const refreshTokenController = require("./controllers/refreshTokenController");
 const logoutController = require("./controllers/logoutController");
 const popupformController = require("./controllers/popUpFormController");
+const testController = require("./controllers/testController");
 
 const jwt = require("jsonwebtoken");
 const { auth } = require("express-openid-connect");
@@ -48,9 +49,11 @@ app.post("/register", registerController.handleRegister);
 app.get("/refresh", refreshTokenController.handleRefreshToken);
 app.get("/logout", logoutController.handleLogout);
 app.post("/popupform", popupformController.handlePopUpForm);
+app.post("/test/", testController.addTest);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));
+app.use("/students", require("./routes/api/students"));
 app.use("/profile", require("./routes/api/profile"));
 app.use("/group", require("./routes/api/group"));
 app.use("/test", require("./routes/api/test"));

@@ -15,6 +15,16 @@ import useAuth from "./hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import PopUpForm from "./PopUpForm";
 
+// axios.interceptors.request.use((request) => {
+//   console.log("Starting Request", JSON.stringify(request, null, 2));
+//   return request;
+// });
+
+// axios.interceptors.response.use((response) => {
+//   console.log("Response:", JSON.stringify(response, null, 2));
+//   return response;
+// });
+
 function LoginPage() {
   //Variables describing users credentials
   const [login, setLogin] = useState("");
@@ -44,6 +54,7 @@ function LoginPage() {
         let roles = response.data.roles;
         console.log(roles);
         let accessToken = response.data.accessToken;
+        console.log(accessToken);
         localStorage.setItem("login", login);
         if (response.data.newUser) {
           setNewUser(true);
