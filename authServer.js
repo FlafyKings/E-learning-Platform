@@ -50,6 +50,7 @@ app.get("/refresh", refreshTokenController.handleRefreshToken);
 app.get("/logout", logoutController.handleLogout);
 app.post("/popupform", popupformController.handlePopUpForm);
 app.post("/test/", testController.addTest);
+app.post("/test/solve", testController.addAnswerToTest);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));

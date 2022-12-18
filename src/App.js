@@ -14,6 +14,7 @@ import GroupsBoardPage from "./GroupsBoardPage";
 import GroupPage from "./GroupPage";
 import TestPage from "./TestPage";
 import TestCreator from "./TestCreator";
+import TestGradingPage from "./TestGradingPage";
 
 const ROLES = {
   Student: "1000",
@@ -47,6 +48,7 @@ const App = () => {
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
             <Route path="/testCreator" element={<TestCreator />}></Route>
+            <Route path="/test/grade/:id" element={<TestGradingPage />}></Route>
           </Route>
 
           <Route
@@ -59,7 +61,7 @@ const App = () => {
             </Route>
             <Route path="/groups/:group" element={<GroupPage />}></Route>
             <Route path="/groups" element={<GroupsBoardPage />} />
-            <Route path="/test/:id" element={<TestPage />} />
+            <Route path="/test/solve/:id" element={<TestPage />} />
           </Route>
         </Route>
         {/*Missing Pages*/}

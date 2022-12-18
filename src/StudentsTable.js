@@ -17,16 +17,11 @@ import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import useAlert from "./hooks/useAlert";
 
-function createData(first_name, last_name) {
-  return {
-    first_name,
-    last_name,
-  };
-}
+const login = window.localStorage.getItem("login");
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -79,6 +74,7 @@ function EnhancedTableHead(props) {
     numSelected,
     rowCount,
     onRequestSort,
+    rows,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -88,16 +84,21 @@ function EnhancedTableHead(props) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
+          {rows[0].ownerLogin === login ? (
+            <Checkbox
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                "aria-label": "select all desserts",
+              }}
+            />
+          ) : (
+            <></>
+          )}
         </TableCell>
+
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -136,7 +137,7 @@ EnhancedTableHead.propTypes = {
 function EnhancedTableToolbar(props) {
   const { selected, numSelected, groupId, rows, setRows } = props;
   const axiosPrivate = useAxiosPrivate();
-
+  const { setAlert, setAlertMessage, setAlertType } = useAlert();
   const handleDeleteStudent = async (studentId) => {
     console.log(studentId);
     console.log(groupId);
@@ -155,6 +156,9 @@ function EnhancedTableToolbar(props) {
       )
       .then((response) => {
         console.log(response);
+        setAlert(true);
+        setAlertType("success");
+        setAlertMessage("Usunięto studenta z grupy!");
       })
       .catch((error) => {
         //Error handling
@@ -190,16 +194,17 @@ function EnhancedTableToolbar(props) {
       sx={{
         pl: { sm: 2 },
         pr: { xs: 1, sm: 1 },
-        ...(numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
+        ...(numSelected > 0 &&
+          rows[0].ownerLogin === login && {
+            bgcolor: (theme) =>
+              alpha(
+                theme.palette.primary.main,
+                theme.palette.action.activatedOpacity
+              ),
+          }),
       }}
     >
-      {numSelected > 0 ? (
+      {numSelected > 0 && rows[0].ownerLogin === login ? (
         <Typography
           sx={{ flex: "1 1 100%" }}
           color="inherit"
@@ -219,12 +224,12 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
 
-      {numSelected > 0 ? (
+      {numSelected > 0 && rows[0].ownerLogin === login ? (
         <Tooltip title="Usuń studenta">
           <IconButton
             onClick={() => handleDeleteStudent(selected ? selected : "")}
           >
-            <DeleteIcon />
+            <DeleteIcon color="error" />
           </IconButton>
         </Tooltip>
       ) : (
@@ -234,12 +239,9 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-// EnhancedTableToolbar.propTypes = {
-//   numSelected: PropTypes.number.isRequired,
-// };
-
 export default function EnhancedTable(props) {
-  const { rows, setRows, groupId } = props;
+  const { rows, setRows, groupId, setAlert, setAlertType, setAlertMessage } =
+    props;
 
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("last_name");
@@ -307,6 +309,9 @@ export default function EnhancedTable(props) {
           selected={selected}
           groupId={groupId}
           numSelected={selected.length}
+          setAlert={setAlert}
+          setAlertMessage={setAlertMessage}
+          setAlertType={setAlertType}
         />
         <TableContainer>
           <Table
@@ -321,6 +326,7 @@ export default function EnhancedTable(props) {
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
+              rows={rows}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
@@ -340,14 +346,19 @@ export default function EnhancedTable(props) {
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
+                        {rows[0].ownerLogin === login ? (
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </TableCell>
+
                       <TableCell
                         component="th"
                         id={labelId}

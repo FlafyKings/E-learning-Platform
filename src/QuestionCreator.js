@@ -69,6 +69,7 @@ const QuestionCreator = ({
       }}
       className={isActive}
     >
+      <Typography>{inputs.answerName4}</Typography>
       <Tabs
         value={value}
         onChange={handleChangeOfPanel}

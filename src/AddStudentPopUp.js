@@ -10,22 +10,25 @@ import { Typography } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import useAlert from "./hooks/useAlert";
 
-const AddStudentPopUp = ({ open, setOpen, groupId, group, setAlert }) => {
+const AddStudentPopUp = ({ open, setOpen, groupId, group }) => {
   const [students, setStudents] = useState();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
   const [values, setValues] = useState();
+  const { setAlert, setAlertMessage, setAlertType } = useAlert();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("grup[ka", group);
-    var result = group.find((item) => item.id == groupId.current)[
-      "students_count"
-    ];
-    group.find((item) => item.id == groupId.current)["students_count"] =
-      parseInt(result) + values.length;
+    if (group) {
+      var result = group.find((item) => item.id == groupId.current)[
+        "students_count"
+      ];
+      group.find((item) => item.id == groupId.current)["students_count"] =
+        parseInt(result) + values.length;
+    }
     let gruopIdCurrent = groupId.current;
     await axiosPrivate
       .post("/students", JSON.stringify({ gruopIdCurrent, values }), {
@@ -35,6 +38,9 @@ const AddStudentPopUp = ({ open, setOpen, groupId, group, setAlert }) => {
       .then((response) => {
         console.log("Halo", response);
         setAlert(true);
+        setAlertType("success");
+        setAlertMessage("Dodano studenta do grupy!");
+        setOpen(false);
       })
       .catch((error) => {
         //Error handling

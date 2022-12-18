@@ -8,9 +8,39 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
+import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
 
-const TestStartPopUp = () => {
+const TestStartPopUp = (props) => {
+  const { testTime, teacher, testName, startDate } = props;
   const [open, setOpen] = useState(true);
+
+  dayjs.extend(updateLocale);
+  dayjs.updateLocale("en", {
+    months: [
+      "Stycznia ",
+      "Lutego",
+      "Marca",
+      "Kwietnia",
+      "Maja",
+      "Czerwieca",
+      "Lipieca",
+      "Sierpnia",
+      "Września",
+      "Października",
+      "Listopada",
+      "Grudnia",
+    ],
+    weekdays: [
+      "Niedziela",
+      "Poniedziałek",
+      "Wtorek",
+      "Środa",
+      "Czwartek",
+      "Piątek",
+      "Sobota",
+    ],
+  });
 
   const navigate = useNavigate();
   const handleClose = () => {
@@ -25,7 +55,7 @@ const TestStartPopUp = () => {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle sx={{ color: "rgba(0, 0, 0, 0.6)" }}>
-          Test z inżynierii obliczeniowej
+          {testName}
         </DialogTitle>
         <DialogContent
           sx={{
@@ -38,13 +68,14 @@ const TestStartPopUp = () => {
           }}
         >
           <Typography textAlign="left">
-            <b>Czas na rozwiązanie testu:</b> 45 minut
+            <b>Czas na rozwiązanie testu:</b> {testTime} minut
           </Typography>
           <Typography textAlign="left">
-            <b>Prowadzący:</b> Imie i Nazwisko
+            <b>Prowadzący:</b> {teacher}
           </Typography>
           <Typography textAlign="left">
-            <b>Data rozpoczęcia testu:</b> 21.09.2022 18:45
+            <b>Data rozpoczęcia testu:</b>{" "}
+            {dayjs(startDate).format("dddd DD MMMM H:mm")}
           </Typography>
         </DialogContent>
         <DialogActions>

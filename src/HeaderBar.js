@@ -15,10 +15,8 @@ import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
 import useAuth from "./hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import useLogout from "./hooks/useLogout";
-import { AtmSharp } from "@mui/icons-material";
 
 const pages = ["Pulpit", "Grupy", "Dziennik", "Poczta", "Chat"];
-const settings = ["Profil", "Ustawienia", "Wyloguj"];
 
 const HeaderBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -127,7 +125,7 @@ const HeaderBar = () => {
             </Menu>
           </Box>
           <LocalLibraryIcon
-            sx={{ display: { sm: "flex", lg: "none", sm: "flex" }, mr: 1 }}
+            sx={{ display: { sm: "flex", lg: "none" }, mr: 1 }}
           />
           <Typography
             variant="h5"

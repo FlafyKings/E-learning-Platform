@@ -1,30 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
-import {
-  Button,
-  Divider,
-  Typography,
-  Card,
-  Box,
-  AvatarTable,
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Button, Divider, Typography, Box, IconButton } from "@mui/material";
 import AddStudentPopUp from "./AddStudentPopUp";
-import GroupTests from "./GroupTests";
-import SendIcon from "@mui/icons-material/Send";
+import IncomingGroupTests from "./IncomingGroupTests";
 import StudentsTable from "./StudentsTable";
+import useAlert from "./hooks/useAlert";
+import AddTestPopUp from "./AddTestPopUp";
 
 function createData(obj) {
   const students_id = obj.students_id;
@@ -41,13 +24,21 @@ const GroupsBoardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const login = window.localStorage.getItem("login");
-  const [open, setOpen] = useState(false);
+  const [openStudent, setOpenStudent] = useState(false);
+  const [openTest, setOpenTest] = useState(false);
   const groupId = useRef();
+
+  //ALERT STATES
+  //const { setAlert, setAlertMessage, setAlertType } = useAlert();
 
   groupId.current = window.location.pathname.replace("/groups/", "");
 
-  const handleOpenAdd = () => {
-    setOpen(true);
+  const handleOpenAddStudent = () => {
+    setOpenStudent(true);
+  };
+
+  const handleOpenAddTest = () => {
+    setOpenTest(true);
   };
 
   useEffect(() => {
@@ -95,12 +86,21 @@ const GroupsBoardPage = () => {
         mt: 7,
       }}
     >
-      {open ? (
+      {openStudent ? (
         <AddStudentPopUp
-          open={open}
-          setOpen={setOpen}
+          open={openStudent}
+          setOpen={setOpenStudent}
           groupId={groupId}
         ></AddStudentPopUp>
+      ) : (
+        <></>
+      )}
+      {openTest ? (
+        <AddTestPopUp
+          open={openTest}
+          setOpen={setOpenTest}
+          groupId={groupId}
+        ></AddTestPopUp>
       ) : (
         <></>
       )}
@@ -110,7 +110,16 @@ const GroupsBoardPage = () => {
             {groupName}
           </Typography>
           <Divider sx={{ width: "100%", mb: 2, mt: 2 }}></Divider>
-          <Button onClick={() => handleOpenAdd()}>Dodaj ucznia</Button>
+          {rows[0].ownerLogin === login ? (
+            <Box>
+              <Button onClick={() => handleOpenAddStudent()}>
+                Dodaj ucznia
+              </Button>
+              <Button onClick={() => handleOpenAddTest()}>Dodaj test</Button>
+            </Box>
+          ) : (
+            <></>
+          )}
         </>
       ) : (
         <p>Brak grupy do wyświetlenia</p>
@@ -124,7 +133,7 @@ const GroupsBoardPage = () => {
       ) : (
         <></>
       )}
-      <GroupTests groupId={groupId}></GroupTests>
+      <IncomingGroupTests groupId={groupId}></IncomingGroupTests>
     </Box>
   );
 };

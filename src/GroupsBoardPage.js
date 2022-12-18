@@ -45,8 +45,12 @@ const GroupsBoardPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+
+  //ALERT STATES
   const [alert, setAlert] = useState(false);
-  const [loginProf, setLoginProf] = useState();
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+
   const login = window.localStorage.getItem("login");
   const groupId = useRef();
 
@@ -88,7 +92,7 @@ const GroupsBoardPage = () => {
   useEffect(() => {
     const timeId = setTimeout(() => {
       setAlert(false);
-    }, 5000);
+    }, 8000);
   }, [alert]);
 
   console.log(group);
@@ -106,9 +110,16 @@ const GroupsBoardPage = () => {
       <Collapse in={alert}>
         {alert ? (
           <Alert
-            sx={{ width: 330, mt: 1 }}
+            sx={{
+              width: 330,
+              mt: 1,
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
             icon={<CheckIcon fontSize="inherit" />}
-            severity="success"
+            severity={alertType}
             action={
               <IconButton
                 aria-label="close"
@@ -122,7 +133,7 @@ const GroupsBoardPage = () => {
               </IconButton>
             }
           >
-            Dodano ucznia do grupy!
+            {alertMessage}
           </Alert>
         ) : (
           <></>
@@ -135,6 +146,8 @@ const GroupsBoardPage = () => {
           groupId={groupId}
           group={group}
           setAlert={setAlert}
+          setAlertMessage={setAlertMessage}
+          setAlertType={setAlertType}
         ></AddStudentPopUp>
       ) : (
         <></>
@@ -159,7 +172,7 @@ const GroupsBoardPage = () => {
               {group.map((row, i) => (
                 <TableRow
                   className="groupTableHover"
-                  key={row.counter}
+                  key={i}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell

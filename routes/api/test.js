@@ -16,6 +16,10 @@ router
 router.route("/").post(verifyRoles(rolesList.Teacher), testController.addTest);
 
 router
+  .route("/:groupId")
+  .post(verifyRoles(rolesList.Teacher), testController.addTestToGroup);
+
+router
   .route("/:group")
   .get(
     verifyRoles(rolesList.Teacher, rolesList.Student),
@@ -23,10 +27,22 @@ router
   );
 
 router
-  .route("/:test")
+  .route("/solve/:test")
   .get(
     verifyRoles(rolesList.Student, rolesList.Teacher),
-    testController.getTest
+    testController.getTestToSolve
+  )
+  .post(
+    verifyRoles(rolesList.Student, rolesList.Teacher),
+    testController.addAnswerToTest
   );
+
+router
+  .route("/grade/:test")
+  .get(verifyRoles(rolesList.Teacher), testController.getTestToGrade);
+
+router
+  .route("/teacher/:login")
+  .get(verifyRoles(rolesList.Teacher), testController.getTeachersTest);
 
 module.exports = router;
