@@ -6,7 +6,11 @@ const verifyRoles = require("../../middleware/verifyRoles");
 
 router
   .route("/")
-  .post(verifyRoles(rolesList.Teacher), studentsController.addStudentToGroup);
+  .post(verifyRoles(rolesList.Teacher), studentsController.addStudentToGroup)
+  .get(
+    verifyRoles(rolesList.Teacher, rolesList.Student),
+    studentsController.getAllUsers
+  );
 
 router
   .route("/:groupId")

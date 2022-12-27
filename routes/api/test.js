@@ -27,6 +27,10 @@ router
   );
 
 router
+  .route("/all/:group")
+  .get(verifyRoles(rolesList.Teacher), testController.getAllTests);
+
+router
   .route("/solve/:test")
   .get(
     verifyRoles(rolesList.Student, rolesList.Teacher),
@@ -39,7 +43,8 @@ router
 
 router
   .route("/grade/:test")
-  .get(verifyRoles(rolesList.Teacher), testController.getTestToGrade);
+  .get(verifyRoles(rolesList.Teacher), testController.getTestToGrade)
+  .post(verifyRoles(rolesList.Teacher), testController.addGradeToTest);
 
 router
   .route("/teacher/:login")

@@ -2,11 +2,6 @@ const client = require("../config/database");
 const format = require("pg-format");
 const dayjs = require("dayjs");
 
-function setCharAt(str, index, chr) {
-  if (index > str.length - 1) return str;
-  return str.substring(0, index) + chr + str.substring(index + 1);
-}
-
 const getTest = async (req, res) => {
   if (!req?.query?.test)
     return res.status(400).json({ message: "Test id required" });
@@ -66,6 +61,7 @@ const addAnswerToTest = async (req, res) => {
       const values = [];
 
       console.log(answerArray);
+
       for (let i = 0; i < testLength; i++) {
         let sumOfClosed = "1234";
         let text = null;
@@ -106,6 +102,37 @@ const addAnswerToTest = async (req, res) => {
   res.json({ message: "Answer saved successfully" });
 };
 
+const addGradeToTest = async (req, res) => {
+  const correct = req.body.correct;
+  const answers = req.body.answers;
+  const score = req.body.studentScore;
+  const testId = req.body.testId;
+
+  var correctString = "";
+  correct.map((row) => {
+    correctString += row;
+  });
+
+  var answersString = "";
+  answers.map((row) => {
+    answersString += row;
+  });
+
+  console.log(correctString, answersString, score, testId);
+
+  client.query(
+    `INSERT INTO public."grades" (score, "answerToTest_id", answers, correct ) values (\'${score}\', \'${testId}\', \'${answers}\', \'${correct}\') RETURNING *`,
+    (err, response) => {
+      if (err) {
+        console.log("Error: ", err);
+      }
+      console.log("res", response);
+    }
+  );
+
+  res.json({ message: "Grade saved successfully" });
+};
+
 const getTestToGrade = async (req, res) => {
   if (!req?.query?.test)
     return res.status(400).json({ message: "Test id required" });
@@ -121,7 +148,7 @@ where answer.id = \'${testId}\'`
   );
 
   const test = await client.query(
-    `select "questionTest".test_id, Question.description, Question.answer_1, Question.answer_2, Question.answer_3, Question.answer_4 
+    `select "questionTest".test_id, Question.description, Question.answer_1, Question.answer_2, Question.answer_3, Question.answer_4, correct 
     from public."questionTest"
     INNER JOIN public."question" as Question ON "questionTest".question_id = Question.id 
 	INNER JOIN public."testGroup" ON "testGroup".test_id = "questionTest".test_id
@@ -194,10 +221,69 @@ const getGroupsTests = async (req, res) => {
   res.json(testsSorted);
 };
 
+const getAllTests = async (req, res) => {
+  if (!req?.query?.groupId) {
+    return res.status(400).json({ message: "Group id required" });
+  }
+  const groupId = req.query.groupId;
+
+  //All tests in a group
+
+  //All ungraded test attempts
+
+  //All test attempts in a group
+
+  const tests =
+    await client.query(`SELECT "testGroup".id, "test".name from public."testGroup" 
+INNER JOIN public."test" on "testGroup".test_id = "test".id
+where "testGroup".group_id = \'${groupId}\'`);
+
+  const ungraded =
+    await client.query(`SELECT testGroup.id as testid, test.name, "user".first_name, "user".last_name, "answerToTest".id as answerid
+from public."testGroup" as testGroup
+INNER JOIN public."test" on testGroup.test_id = "test".id
+INNER JOIN public."answerToTest" on "answerToTest"."groupTest_id" = testGroup.id
+INNER JOIN public."user" on "answerToTest".student_id = "user".id
+where group_id = \'${groupId}\' and "answerToTest".id not in (select grades."answerToTest_id" from grades)`);
+
+  const allAttempts =
+    await client.query(`SELECT testGroup.id as testid, test.name, "user".first_name, "user".last_name, "answerToTest".id as answerid, "grades".score
+from public."testGroup" as testGroup
+INNER JOIN public."test" on testGroup.test_id = "test".id
+INNER JOIN public."answerToTest" on "answerToTest"."groupTest_id" = testGroup.id
+INNER JOIN public."user" on "answerToTest".student_id = "user".id
+INNER JOIN public."grades" on "answerToTest".id = "grades"."answerToTest_id"
+where group_id = \'${groupId}\'`);
+
+  // var testsSorted = tests.rows;
+
+  // testsSorted.sort(function (a, b) {
+  //   return b.date - a.date;
+  // });
+
+  if (!tests) return res.status(204).json({ message: "No tests found" });
+
+  res.json({ tests, ungraded, allAttempts });
+};
+
 const getTestToSolve = async (req, res) => {
   if (!req?.query?.test)
     return res.status(400).json({ message: "Test id required" });
+
   const testId = req?.query?.test;
+  const login = req?.query?.login;
+
+  const answer = await client.query(`select "user".login from "answerToTest"
+INNER JOIN public."user" on "answerToTest".student_id = "user".id
+where "user".login = \'${login}\' and "answerToTest"."groupTest_id" = ${testId}`);
+
+  console.log(answer.rows);
+
+  if (answer.rows.length != 0) {
+    return res
+      .status(400)
+      .json({ message: "Test został już przez Ciebie rozwiązany" });
+  }
 
   const testDetails = await client.query(
     `select "test".id, "test".name, "test".time, "user".first_name, "user".last_name, "testGroup".date
@@ -212,13 +298,6 @@ where "testGroup".id = \'${testId}\'`
   }
 
   const time = testDetails.rows[0].time;
-
-  console.log(
-    dayjs() -
-      dayjs(testDetails.rows[0].date)
-        .add(time % 60, "minute")
-        .add(Math.floor(time / 60), "hour")
-  );
 
   if (
     dayjs() -
@@ -254,7 +333,31 @@ const addTest = async (req, res) => {
     let answer2 = req.body.inputs["answer2" + i];
     let answer3 = req.body.inputs["answer3" + i];
     let answer4 = req.body.inputs["answer4" + i];
-    var row = [question, answer1, answer2, answer3, answer4];
+
+    let correct1 = req.body.inputs["correct1" + i];
+    let correct2 = req.body.inputs["correct2" + i];
+    let correct3 = req.body.inputs["correct3" + i];
+    let correct4 = req.body.inputs["correct4" + i];
+
+    //PLACE FOR CORRECT
+    let sumOfClosed = "1234";
+
+    if (correct1 == true && answer1 !== "") {
+      sumOfClosed = sumOfClosed.replace("1", "5");
+    }
+    if (correct2 == true && answer2 !== "") {
+      sumOfClosed = sumOfClosed.replace("2", "5");
+    }
+    if (correct3 == true && answer3 !== "") {
+      sumOfClosed = sumOfClosed.replace("3", "5");
+    }
+    if (correct4 == true && answer4 !== "") {
+      sumOfClosed = sumOfClosed.replace("4", "5");
+    }
+
+    var correct = sumOfClosed;
+
+    var row = [question, answer1, answer2, answer3, answer4, correct];
 
     for (let index = 0; index < row.length; index++) {
       if (row[index] === "") {
@@ -290,7 +393,7 @@ const addTest = async (req, res) => {
 
   client.query(
     format(
-      'INSERT INTO public."question" (description, answer_1, answer_2,answer_3,answer_4) VALUES %L RETURNING id',
+      'INSERT INTO public."question" (description, answer_1, answer_2,answer_3,answer_4, correct) VALUES %L RETURNING id',
       values
     ),
     [],
@@ -321,4 +424,6 @@ module.exports = {
   getTestToSolve,
   addAnswerToTest,
   getTestToGrade,
+  addGradeToTest,
+  getAllTests,
 };

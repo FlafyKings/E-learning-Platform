@@ -34,11 +34,18 @@ const QuestionCreator = ({
   const [value, setValue] = React.useState(0);
   const [isActive, setIsActive] = React.useState("");
 
+  //QUESTIONS AND POSSIBLE ANSWERS
   const questionName = "question" + listId;
   const answerName1 = "answer1" + listId;
   const answerName2 = "answer2" + listId;
   const answerName3 = "answer3" + listId;
   const answerName4 = "answer4" + listId;
+
+  //CORRECT ANSWERS
+  const correct1 = "correct1" + listId;
+  const correct2 = "correct2" + listId;
+  const correct3 = "correct3" + listId;
+  const correct4 = "correct4" + listId;
 
   const handleChangeOfPanel = (event, newValue) => {
     setValue(newValue);
@@ -48,6 +55,10 @@ const QuestionCreator = ({
       [answerName2]: "",
       [answerName3]: "",
       [answerName4]: "",
+      [correct1]: false,
+      [correct2]: false,
+      [correct3]: false,
+      [correct4]: false,
     }));
   };
 
@@ -94,7 +105,14 @@ const QuestionCreator = ({
         <FormGroup>
           <FormControlLabel
             sx={{ mb: 0.5 }}
-            control={<Checkbox className="creatorCheckbox" name="1" />}
+            control={
+              <Checkbox
+                className="creatorCheckbox"
+                name={correct1}
+                value={inputs.correct1}
+                onChange={handleChange}
+              />
+            }
             label={
               <TextField
                 className="creatorTextField"
@@ -108,7 +126,14 @@ const QuestionCreator = ({
           />
           <FormControlLabel
             sx={{ mb: 0.5 }}
-            control={<Checkbox className="creatorCheckbox" name="1" />}
+            control={
+              <Checkbox
+                className="creatorCheckbox"
+                name={correct2}
+                value={inputs.correct2}
+                onChange={handleChange}
+              />
+            }
             label={
               <TextField
                 className="creatorTextField"
@@ -122,7 +147,14 @@ const QuestionCreator = ({
           />
           <FormControlLabel
             sx={{ mb: 0.5 }}
-            control={<Checkbox className="creatorCheckbox" name="1" />}
+            control={
+              <Checkbox
+                className="creatorCheckbox"
+                name={correct3}
+                value={inputs.correct3}
+                onChange={handleChange}
+              />
+            }
             label={
               <TextField
                 className="creatorTextField"
@@ -136,7 +168,14 @@ const QuestionCreator = ({
           />
           <FormControlLabel
             sx={{ mb: 0.5 }}
-            control={<Checkbox className="creatorCheckbox" name="1" />}
+            control={
+              <Checkbox
+                className="creatorCheckbox"
+                name={correct4}
+                value={inputs.correct4}
+                onChange={handleChange}
+              />
+            }
             label={
               <TextField
                 className="creatorTextField"

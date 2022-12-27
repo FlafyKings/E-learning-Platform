@@ -16,14 +16,18 @@ import useAuth from "./hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import useLogout from "./hooks/useLogout";
 
-const pages = ["Pulpit", "Grupy", "Dziennik", "Poczta", "Chat"];
-
 const HeaderBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const logout = useLogout();
   const { auth } = useAuth();
+
+  var pages = ["Pulpit", "Grupy", "Dziennik", "Poczta", "Chat"];
+
+  if (auth.roles == 2000) {
+    pages = ["Pulpit", "Grupy", "Poczta", "Chat"];
+  }
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);

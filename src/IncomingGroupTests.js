@@ -13,6 +13,7 @@ import {
   Paper,
   IconButton,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import dayjs from "dayjs";
@@ -121,81 +122,92 @@ const IncomingGroupTests = ({ groupId }) => {
   }, [test]);
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-        width: "100%",
-        height: "100%",
-        mt: 7,
-        mb: 8,
-      }}
-    >
-      {test && test?.length != 0 ? (
-        <>
-          <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
-            <Table sx={{ Width: 250 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="left">Nazwa</TableCell>
-                  <TableCell align="left">Data</TableCell>
-                  <TableCell align="left">Akcje</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {test.map((row, i) => (
-                  <>
-                    {dayjs(row.date)
-                      .add(row.time % 60, "minute")
-                      .add(Math.floor(row.time / 60), "hour") -
-                      dayjs() >
-                    0 ? (
-                      <TableRow
-                        key={i}
-                        className="groupTableHover"
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell align="left">{row.name}</TableCell>
-                        <TableCell>{dayjs(row.date).fromNow()}</TableCell>
-                        <TableCell>
-                          {dayjs(row.date) - dayjs() < 0 &&
-                          dayjs(row.date)
-                            .add(row.time % 60, "minute")
-                            .add(Math.floor(row.time / 60), "hour") -
-                            dayjs() >
-                            0 ? (
-                            <Tooltip title="Rozpocznij test">
-                              <IconButton
-                                onClick={() =>
-                                  navigate(`/test/solve/${row.id}`)
-                                }
-                              >
-                                <OpenInNewIcon
-                                  sx={{ color: "rgba(0, 0, 0, 0.6)" }}
-                                />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <></>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      <></>
-                    )}
-                  </>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </>
-      ) : (
-        <p>Brak testów w tej grupie</p>
-      )}
+    <Box sx={{ width: 400 }}>
+      <Paper
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          width: "100%",
+          height: "100%",
+          mt: 7,
+          mb: 8,
+          pt: 2,
+          pb: 2,
+        }}
+      >
+        <Typography
+          sx={{ fontWeight: 500, color: "rgba(0, 0, 0, 0.6)", mb: 1 }}
+        >
+          Nadchodzące testy
+        </Typography>
+        {test && test?.length != 0 ? (
+          <>
+            <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
+              <Table sx={{ Width: 400 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell align="left">Nazwa</TableCell>
+                    <TableCell align="left">Data</TableCell>
+                    <TableCell align="left">Akcje</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {test.map((row, i) => (
+                    <>
+                      {dayjs(row.date)
+                        .add(row.time % 60, "minute")
+                        .add(Math.floor(row.time / 60), "hour") -
+                        dayjs() >
+                      0 ? (
+                        <TableRow
+                          key={i}
+                          className="groupTableHover"
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell align="left">{row.name}</TableCell>
+                          <TableCell>{dayjs(row.date).fromNow()}</TableCell>
+                          <TableCell>
+                            {dayjs(row.date) - dayjs() < 0 &&
+                            dayjs(row.date)
+                              .add(row.time % 60, "minute")
+                              .add(Math.floor(row.time / 60), "hour") -
+                              dayjs() >
+                              0 ? (
+                              <Tooltip title="Rozpocznij test">
+                                <IconButton
+                                  onClick={() =>
+                                    navigate(`/test/solve/${row.id}`)
+                                  }
+                                >
+                                  <OpenInNewIcon
+                                    sx={{ color: "rgba(0, 0, 0, 0.6)" }}
+                                  />
+                                </IconButton>
+                              </Tooltip>
+                            ) : (
+                              <></>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        <></>
+                      )}
+                    </>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        ) : (
+          <Typography sx={{ color: "rgba(0, 0, 0, 0.6)", textAlign: "center" }}>
+            Brak testów w tej grupie
+          </Typography>
+        )}
+      </Paper>
     </Box>
   );
 };

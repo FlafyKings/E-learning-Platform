@@ -28,13 +28,15 @@ import {
   FormControl,
   Slider,
 } from "@mui/material";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import QuestionCreator from "./QuestionCreator";
 import { TransitionGroup } from "react-transition-group";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import axiosPrivate from "./api/axios";
+import useAlert from "./hooks/useAlert";
+import { useNavigate } from "react-router-dom";
 
 const TestCreator = () => {
   const [questionList, setQuestionList] = useState([]);
@@ -43,14 +45,31 @@ const TestCreator = () => {
   const [title, setTittle] = useState("");
   const [inputs, setInputs] = useState({});
   const [testTime, setTestTime] = useState(45);
+  const navigate = useNavigate();
+  const { setAlert, setAlertMessage, setAlertType } = useAlert();
 
   const handleChange = (event) => {
     const name = event.target.name;
-    const value = event.target.value;
+    let value = "";
+    if (event.target.type == "checkbox") {
+      value = event.target.checked;
+    } else {
+      value = event.target.value;
+    }
 
-    console.log(event.target.value);
     setInputs((values) => ({ ...values, [name]: value }));
   };
+
+  // const handleCheckboxChange = (event) => {
+  //   const name = event.target.name;
+  //   const value = event.target.value;
+
+  //   setInputs((values) => ({ ...values, [name]: value }));
+  // }
+
+  useEffect(() => {
+    console.log(inputs);
+  }, [inputs]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -66,7 +85,10 @@ const TestCreator = () => {
         }
       )
       .then((response) => {
-        //dodac dialog box albo osobna strone
+        setAlert(true);
+        setAlertMessage("Dodano test");
+        setAlertType("success");
+        navigate("/dashboard");
       })
       .catch((error) => {
         //Error handling
@@ -100,18 +122,29 @@ const TestCreator = () => {
   };
 
   useEffect(() => {
-    //setQuestionList(questionList.filter((i) => i.props.listId !== item));
+    //QUESTION AND POSSIBLE ANSWERS
     let questionName = "question" + item;
     let answerName1 = "answer1" + item;
     let answerName2 = "answer2" + item;
     let answerName3 = "answer3" + item;
     let answerName4 = "answer4" + item;
 
+    //CORRECT ANSWERS
+    let correct1 = "correct1" + item;
+    let correct2 = "correct2" + item;
+    let correct3 = "correct3" + item;
+    let correct4 = "correct4" + item;
+
     delete inputs[questionName];
     delete inputs[answerName1];
     delete inputs[answerName2];
     delete inputs[answerName3];
     delete inputs[answerName4];
+
+    delete inputs[correct1];
+    delete inputs[correct2];
+    delete inputs[correct3];
+    delete inputs[correct4];
   }, [item]);
 
   const onAddBtnClick = (event) => {
@@ -134,6 +167,12 @@ const TestCreator = () => {
     let answerName2 = "answer2" + questionId;
     let answerName3 = "answer3" + questionId;
     let answerName4 = "answer4" + questionId;
+
+    let correct1 = "correct1" + questionId;
+    let correct2 = "correct2" + questionId;
+    let correct3 = "correct3" + questionId;
+    let correct4 = "correct4" + questionId;
+
     setInputs((values) => ({
       ...values,
       [questionName]: "",
@@ -141,6 +180,10 @@ const TestCreator = () => {
       [answerName2]: "",
       [answerName3]: "",
       [answerName4]: "",
+      [correct1]: false,
+      [correct2]: false,
+      [correct3]: false,
+      [correct4]: false,
     }));
   };
 
@@ -165,6 +208,10 @@ const TestCreator = () => {
       answer20: "",
       answer30: "",
       answer40: "",
+      correct10: false,
+      correct20: false,
+      correct30: false,
+      correct40: false,
     }));
   }, []);
 

@@ -15,6 +15,8 @@ import GroupPage from "./GroupPage";
 import TestPage from "./TestPage";
 import TestCreator from "./TestCreator";
 import TestGradingPage from "./TestGradingPage";
+import GradePage from "./GradePage";
+import MailPage from "./MailPage";
 
 const ROLES = {
   Student: "1000",
@@ -44,6 +46,7 @@ const App = () => {
             }
           >
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/mail" element={<MailPage />} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
@@ -56,6 +59,7 @@ const App = () => {
               <RequireAuth allowedRoles={[ROLES.Student, ROLES.Teacher]} />
             }
           >
+            <Route path="/grades" element={<GradePage />}></Route>
             <Route path="/profile">
               <Route path=":login" element={<Profile />} />
             </Route>

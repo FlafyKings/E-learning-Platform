@@ -2,12 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
-import { Button, Divider, Typography, Box, IconButton } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Typography,
+  Box,
+  IconButton,
+  Grid,
+  Paper,
+} from "@mui/material";
 import AddStudentPopUp from "./AddStudentPopUp";
 import IncomingGroupTests from "./IncomingGroupTests";
 import StudentsTable from "./StudentsTable";
+import StudentsTableTeacher from "./StudentsTableTeacher";
 import useAlert from "./hooks/useAlert";
 import AddTestPopUp from "./AddTestPopUp";
+import TeacherTestTable from "./TeacherTestTable";
 
 function createData(obj) {
   const students_id = obj.students_id;
@@ -20,6 +30,7 @@ function createData(obj) {
 const GroupsBoardPage = () => {
   const [rows, setRows] = useState();
   const [groupName, setGroupName] = useState();
+  const [grades, setGrades] = useState([]);
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,6 +71,14 @@ const GroupsBoardPage = () => {
             return createData(row);
           })
         );
+        // let arrayTemp = [];
+        // response.data.grades.rows.map((row) => {
+        //   if (row.score != null) {
+        //     arrayTemp.push(row);
+        //   }
+        // });
+
+        setGrades(response.data.grades.rows);
       } catch (err) {
         console.error(err);
         navigate("/login", { state: { from: location }, replace: true });
@@ -122,18 +141,37 @@ const GroupsBoardPage = () => {
           )}
         </>
       ) : (
-        <p>Brak grupy do wyświetlenia</p>
+        <Paper sx={{ width: 400, height: 200 }}>
+          <Typography sx={{ textAlign: "center" }}>
+            Brak grupy do wyświetlenia
+          </Typography>
+        </Paper>
       )}
       {rows ? (
-        <StudentsTable
-          groupId={groupId}
-          rows={rows}
-          setRows={setRows}
-        ></StudentsTable>
+        rows[0].ownerLogin === login ? (
+          <StudentsTableTeacher
+            groupId={groupId}
+            rows={rows}
+            setRows={setRows}
+            grades={grades}
+          ></StudentsTableTeacher>
+        ) : (
+          <StudentsTable
+            groupId={groupId}
+            rows={rows}
+            setRows={setRows}
+          ></StudentsTable>
+        )
       ) : (
         <></>
       )}
       <IncomingGroupTests groupId={groupId}></IncomingGroupTests>
+
+      {rows && rows[0].ownerLogin === login ? (
+        <TeacherTestTable groupId={groupId}></TeacherTestTable>
+      ) : (
+        <Paper sx={{ width: 400, height: 200 }}></Paper>
+      )}
     </Box>
   );
 };

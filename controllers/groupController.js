@@ -2,6 +2,7 @@ const client = require("../config/database");
 
 const getAllGroups = async (req, res) => {
   const login = req.query.login;
+
   const group = await client.query(
     `select "studentsGroup".students_id, "group".id, "group".name, Teacher.first_name, Teacher.last_name, Teacher.login, (select count(students_id) as students_count from public."studentsGroup" where group_id = "group".id)  
 from public."studentsGroup" 
@@ -15,6 +16,7 @@ from public."user" as Teacher
 INNER JOIN public."group" on "group".owner_id = Teacher.id
 where Teacher.login = \'${login}\'`
   );
+
   if (!group) {
     return res
       .status(204)
@@ -41,12 +43,29 @@ const getGroup = async (req, res) => {
     where group_id = \'${groupId}\'`
   );
 
+  const grades = await client.query(
+    `select "user".id, "grades".score, "test".name from public."group" 
+INNER JOIN public."studentsGroup" on "group".id = "studentsGroup".group_id
+INNER JOIN public."user" on "studentsGroup".students_id = "user".id
+LEFT JOIN public."answerToTest" on "answerToTest".student_id = "user".id
+INNER JOIN public."testGroup" on "answerToTest"."groupTest_id" = "testGroup".id
+INNER JOIN public."test" on "testGroup".test_id = "test".id
+LEFT JOIN public."grades" on "answerToTest".id = "grades"."answerToTest_id"
+where "group".id = \'${groupId}\'`
+  );
+
+  if (!grades) {
+    return res
+      .status(204)
+      .json({ message: `Group ${req.query.groupId} not found` });
+  }
+
   if (!groupName) {
     return res
       .status(204)
       .json({ message: `Group of id ${req.query.group} not found` });
   }
-  res.json({ group, groupName });
+  res.json({ group, groupName, grades });
 };
 
 module.exports = {

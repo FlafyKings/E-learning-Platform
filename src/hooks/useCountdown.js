@@ -17,6 +17,7 @@ const useCountDown = (targetDate) => {
   }, [countDownDate]);
 
   if (countDown < 0) {
+    document.forms["testSolvingForm"].submit();
     return [0, 0];
   } else {
     return getReturnValues(countDown);

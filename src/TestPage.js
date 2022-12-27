@@ -160,6 +160,7 @@ const TestPage = () => {
   return (
     <Box
       component="form"
+      name="testSolvingForm"
       onSubmit={handleSubmit}
       sx={{
         display: "flex",

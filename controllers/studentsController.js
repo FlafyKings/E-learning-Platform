@@ -11,6 +11,14 @@ const getAllStudents = async (req, res) => {
   res.json(users.rows);
 };
 
+const getAllUsers = async (req, res) => {
+  const users = await client.query(
+    `SELECT id, first_name, last_name, login from public."user"`
+  );
+  if (!users) return res.status(204).json({ message: "No users found" });
+  res.json(users.rows);
+};
+
 const addStudentToGroup = async (req, res) => {
   //Creating variables representing form values
   let groupId = req.body.gruopIdCurrent;
@@ -78,4 +86,5 @@ module.exports = {
   getAllStudents,
   addStudentToGroup,
   deleteStudent,
+  getAllUsers,
 };

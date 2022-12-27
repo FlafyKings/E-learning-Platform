@@ -12,6 +12,8 @@ const bcrypt = require("bcryptjs");
 const app = express();
 const path = require("path");
 
+const dayjs = require("dayjs");
+
 //CONTROLLERS
 const authController = require("./controllers/authController");
 const registerController = require("./controllers/registerController");
@@ -51,6 +53,7 @@ app.get("/logout", logoutController.handleLogout);
 app.post("/popupform", popupformController.handlePopUpForm);
 app.post("/test/", testController.addTest);
 app.post("/test/solve", testController.addAnswerToTest);
+app.post("/test/grade", testController.addGradeToTest);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));
@@ -58,6 +61,8 @@ app.use("/students", require("./routes/api/students"));
 app.use("/profile", require("./routes/api/profile"));
 app.use("/group", require("./routes/api/group"));
 app.use("/test", require("./routes/api/test"));
+app.use("/grade", require("./routes/api/grade"));
+app.use("/chat", require("./routes/api/message"));
 
 app.all("*", (req, res) => {
   res.status(404);
@@ -72,4 +77,52 @@ app.all("*", (req, res) => {
 
 const PORT = process.env.PORT || 8080;
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
+const server = app.listen(PORT, console.log(`Server started on port ${PORT}`));
+
+//SOCKETIO
+
+const socketio = require("socket.io");
+const { useEffect } = require("react");
+
+const io = socketio(server);
+const chat = io.of("/chat/");
+
+chat.on("connection", (socket) => {
+  const users = [];
+  for (let [id, socket] of io.of("/chat").sockets) {
+    console.log("yoooooo", id, socket);
+    users.push({
+      userID: id,
+      login: socket.login,
+    });
+  }
+  socket.emit("users", users);
+
+  socket.on("send message", (obj) => {
+    const receiverId = obj.receiver_id;
+    const text = obj.message;
+    const timestamp = dayjs(obj.timestamp).add(1, "hour");
+    const login = obj.login;
+    console.log(obj.message);
+    console.log(obj.login);
+    console.log(obj.receiver_id);
+
+    const result = client.query(
+      `INSERT INTO public."message" (sender_id, receiver_id, text, timestamp) VALUES ((select "user".id from public."user" where login = \'${login}\'), \'${receiverId}\', \'${text}\', \'${timestamp}\')`
+    );
+    chat.emit("new message", obj);
+  });
+});
+
+chat.on("connect_error", (err) => {
+  console.log(`connect_error due to ${err.message}`);
+});
+
+// chat.use((socket, next) => {
+//   const login = socket.handshake.auth.login;
+//   if (!login) {
+//     return next(new Error("invalid username"));
+//   }
+//   socket.login = login;
+//   next();
+// });

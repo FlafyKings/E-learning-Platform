@@ -10,6 +10,9 @@ const corsOptions = {
     }
   },
   optionsSuccessStatus: 200,
+  methods: ["GET", "POST"],
+  transports: ["websocket", "polling"],
+  credentials: true,
 };
 
 module.exports = corsOptions;
