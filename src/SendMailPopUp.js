@@ -22,12 +22,13 @@ const AddStudentPopUp = ({ open, handlePopUp, groupId, group, setOpen }) => {
   const location = useLocation();
   const [values, setValues] = useState();
   const { setAlert, setAlertMessage, setAlertType } = useAlert();
+  const login = window.localStorage.getItem("login");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     await axiosPrivate
-      .post("/students", JSON.stringify({ values }), {
+      .post("/mail", JSON.stringify({ text, title, values, login }), {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       })
@@ -87,18 +88,6 @@ const AddStudentPopUp = ({ open, handlePopUp, groupId, group, setOpen }) => {
       controller.abort();
     };
   }, []);
-
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
-
-  useEffect(() => {
-    console.log(text);
-  }, [text]);
-
-  useEffect(() => {
-    console.log(title);
-  }, [title]);
 
   return (
     <div>

@@ -17,6 +17,7 @@ import TestCreator from "./TestCreator";
 import TestGradingPage from "./TestGradingPage";
 import GradePage from "./GradePage";
 import MailPage from "./MailPage";
+import MailText from "./MailText";
 
 const ROLES = {
   Student: "1000",
@@ -47,6 +48,7 @@ const App = () => {
           >
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/mail" element={<MailPage />} />
+            <Route path="/mail/text/:mailId" element={<MailText></MailText>} />
           </Route>
 
           <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>

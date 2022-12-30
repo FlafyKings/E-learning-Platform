@@ -63,6 +63,7 @@ app.use("/group", require("./routes/api/group"));
 app.use("/test", require("./routes/api/test"));
 app.use("/grade", require("./routes/api/grade"));
 app.use("/chat", require("./routes/api/message"));
+app.use("/mail", require("./routes/api/mail"));
 
 app.all("*", (req, res) => {
   res.status(404);
