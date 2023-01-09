@@ -51,7 +51,11 @@ LEFT JOIN public."answerToTest" on "answerToTest".student_id = "user".id
 INNER JOIN public."testGroup" on "answerToTest"."groupTest_id" = "testGroup".id
 INNER JOIN public."test" on "testGroup".test_id = "test".id
 LEFT JOIN public."grades" on "answerToTest".id = "grades"."answerToTest_id"
-where "group".id = \'${groupId}\'`
+where "group".id = \'${groupId}\' UNION
+SELECT "gradesHomework".student_id,"gradesHomework".score, "homework".name from "gradesHomework"
+INNER JOIN public."answerToHomework" on "gradesHomework".answer_id = "answerToHomework".id
+INNER JOIN public."homework" on "homework".id = "answerToHomework".homework_id
+where "homework"."groupId" = \'${groupId}\'`
   );
 
   if (!grades) {

@@ -18,6 +18,11 @@ import StudentsTableTeacher from "./StudentsTableTeacher";
 import useAlert from "./hooks/useAlert";
 import AddTestPopUp from "./AddTestPopUp";
 import TeacherTestTable from "./TeacherTestTable";
+import ArticleIcon from "@mui/icons-material/Article";
+import PersonIcon from "@mui/icons-material/Person";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import IncomingGroupHomework from "./IncomingGroupHomework";
+import TeacherHomeworkTable from "./TeacherHomeworkTable";
 
 function createData(obj) {
   const students_id = obj.students_id;
@@ -93,6 +98,10 @@ const GroupsBoardPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    console.log(grades);
+  }, [grades]);
+
   return (
     <Box
       sx={{
@@ -130,11 +139,30 @@ const GroupsBoardPage = () => {
           </Typography>
           <Divider sx={{ width: "100%", mb: 2, mt: 2 }}></Divider>
           {rows[0].ownerLogin === login ? (
-            <Box>
-              <Button onClick={() => handleOpenAddStudent()}>
+            <Box sx={{ mb: 2 }}>
+              <Button
+                endIcon={<PersonIcon></PersonIcon>}
+                sx={{ mr: 2 }}
+                variant="contained"
+                onClick={() => handleOpenAddStudent()}
+              >
                 Dodaj ucznia
               </Button>
-              <Button onClick={() => handleOpenAddTest()}>Dodaj test</Button>
+              <Button
+                variant="contained"
+                sx={{ mr: 2 }}
+                endIcon={<HomeWorkIcon></HomeWorkIcon>}
+                onClick={() => navigate("/homeworkCreator/" + groupId.current)}
+              >
+                Dodaj zadanie
+              </Button>
+              <Button
+                endIcon={<ArticleIcon></ArticleIcon>}
+                variant="contained"
+                onClick={() => handleOpenAddTest()}
+              >
+                Dodaj test
+              </Button>
             </Box>
           ) : (
             <></>
@@ -147,31 +175,42 @@ const GroupsBoardPage = () => {
           </Typography>
         </Paper>
       )}
-      {rows ? (
-        rows[0].ownerLogin === login ? (
-          <StudentsTableTeacher
-            groupId={groupId}
-            rows={rows}
-            setRows={setRows}
-            grades={grades}
-          ></StudentsTableTeacher>
+      <Box sx={{ display: { lg: "flex" }, gap: 4 }}>
+        {rows ? (
+          rows[0].ownerLogin === login ? (
+            <StudentsTableTeacher
+              groupId={groupId}
+              rows={rows}
+              setRows={setRows}
+              grades={grades}
+            ></StudentsTableTeacher>
+          ) : (
+            <StudentsTable
+              groupId={groupId}
+              rows={rows}
+              setRows={setRows}
+            ></StudentsTable>
+          )
         ) : (
-          <StudentsTable
-            groupId={groupId}
-            rows={rows}
-            setRows={setRows}
-          ></StudentsTable>
-        )
-      ) : (
-        <></>
-      )}
-      <IncomingGroupTests groupId={groupId}></IncomingGroupTests>
-
-      {rows && rows[0].ownerLogin === login ? (
-        <TeacherTestTable groupId={groupId}></TeacherTestTable>
-      ) : (
-        <Paper sx={{ width: 400, height: 200 }}></Paper>
-      )}
+          <></>
+        )}
+        <Box>
+          {rows && rows[0].ownerLogin === login ? (
+            <TeacherTestTable groupId={groupId}></TeacherTestTable>
+          ) : (
+            <></>
+          )}
+          {rows && rows[0].ownerLogin === login ? (
+            <TeacherHomeworkTable groupId={groupId}></TeacherHomeworkTable>
+          ) : (
+            <></>
+          )}
+        </Box>
+      </Box>
+      <Box>
+        <IncomingGroupTests groupId={groupId}></IncomingGroupTests>
+        <IncomingGroupHomework groupId={groupId}></IncomingGroupHomework>
+      </Box>
     </Box>
   );
 };

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const express = require("express");
+const fileupload = require("express-fileupload");
 
 //CORS
 const cors = require("cors");
@@ -21,6 +22,7 @@ const refreshTokenController = require("./controllers/refreshTokenController");
 const logoutController = require("./controllers/logoutController");
 const popupformController = require("./controllers/popUpFormController");
 const testController = require("./controllers/testController");
+const homeworkController = require("./controllers/homeworkController");
 
 const jwt = require("jsonwebtoken");
 const { auth } = require("express-openid-connect");
@@ -38,8 +40,10 @@ client.connect();
 app.use(logger);
 app.use(credentials);
 app.use(cors(corsOptions));
+app.use(express.static("files"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(fileupload());
 
 app.use(cookieParser());
 
@@ -54,6 +58,8 @@ app.post("/popupform", popupformController.handlePopUpForm);
 app.post("/test/", testController.addTest);
 app.post("/test/solve", testController.addAnswerToTest);
 app.post("/test/grade", testController.addGradeToTest);
+app.post("/homework/solve", homeworkController.addAnswerHomework);
+app.post("/homework/grade", homeworkController.addGradeToHomework);
 
 app.use(verifyJWT);
 app.use("/users", require("./routes/api/users"));
@@ -64,6 +70,7 @@ app.use("/test", require("./routes/api/test"));
 app.use("/grade", require("./routes/api/grade"));
 app.use("/chat", require("./routes/api/message"));
 app.use("/mail", require("./routes/api/mail"));
+app.use("/homework", require("./routes/api/homework"));
 
 app.all("*", (req, res) => {
   res.status(404);

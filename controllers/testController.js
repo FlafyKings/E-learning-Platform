@@ -236,7 +236,9 @@ const getAllTests = async (req, res) => {
   const tests =
     await client.query(`SELECT "testGroup".id, "test".name from public."testGroup" 
 INNER JOIN public."test" on "testGroup".test_id = "test".id
-where "testGroup".group_id = \'${groupId}\'`);
+where "testGroup".group_id = \'${groupId}\' UNION 
+SELECT "homework".id ,"homework".name from public."homework" 
+where "homework"."groupId" = \'${groupId}\'`);
 
   const ungraded =
     await client.query(`SELECT testGroup.id as testid, test.name, "user".first_name, "user".last_name, "answerToTest".id as answerid
@@ -244,7 +246,12 @@ from public."testGroup" as testGroup
 INNER JOIN public."test" on testGroup.test_id = "test".id
 INNER JOIN public."answerToTest" on "answerToTest"."groupTest_id" = testGroup.id
 INNER JOIN public."user" on "answerToTest".student_id = "user".id
-where group_id = \'${groupId}\' and "answerToTest".id not in (select grades."answerToTest_id" from grades)`);
+where group_id = \'${groupId}\' and "answerToTest".id not in (select grades."answerToTest_id" from grades) UNION
+SELECT testGroup.id as testid, testGroup.name, "user".first_name, "user".last_name, "answerToHomework".id as answerid
+from public."homework" as testGroup
+INNER JOIN public."answerToHomework" on "answerToHomework"."homework_id" = testGroup.id
+INNER JOIN public."user" on "answerToHomework".student_id = "user".id
+where testGroup."groupId" = \'${groupId}\' and "answerToHomework".id not in (select "gradesHomework"."answer_id" from public."gradesHomework")`);
 
   const allAttempts =
     await client.query(`SELECT testGroup.id as testid, test.name, "user".first_name, "user".last_name, "answerToTest".id as answerid, "grades".score
@@ -253,7 +260,12 @@ INNER JOIN public."test" on testGroup.test_id = "test".id
 INNER JOIN public."answerToTest" on "answerToTest"."groupTest_id" = testGroup.id
 INNER JOIN public."user" on "answerToTest".student_id = "user".id
 INNER JOIN public."grades" on "answerToTest".id = "grades"."answerToTest_id"
-where group_id = \'${groupId}\'`);
+where group_id = \'${groupId}\' UNION SELECT testGroup.id as testid, testGroup.name, "user".first_name, "user".last_name, "answerToHomework".id as answerid, "gradesHomework".score
+from public."homework" as testGroup
+INNER JOIN public."answerToHomework" on "answerToHomework"."homework_id" = testGroup.id
+INNER JOIN public."user" on "answerToHomework".student_id = "user".id
+INNER JOIN public."gradesHomework" on "answerToHomework".id = "gradesHomework"."answer_id"
+where testGroup."groupId" = \'${groupId}\'`);
 
   // var testsSorted = tests.rows;
 

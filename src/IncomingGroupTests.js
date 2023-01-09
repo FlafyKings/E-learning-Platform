@@ -122,7 +122,7 @@ const IncomingGroupTests = ({ groupId }) => {
   }, [test]);
 
   return (
-    <Box sx={{ width: 400 }}>
+    <Box sx={{ width: { xs: 400, lg: 600, md: 500 } }}>
       <Paper
         sx={{
           display: "flex",
@@ -144,8 +144,11 @@ const IncomingGroupTests = ({ groupId }) => {
         </Typography>
         {test && test?.length != 0 ? (
           <>
-            <TableContainer component={Paper} sx={{ maxWidth: 500 }}>
-              <Table sx={{ Width: 400 }} aria-label="simple table">
+            <TableContainer component={Paper}>
+              <Table
+                sx={{ width: { xs: 400, lg: 600, md: 500 } }}
+                aria-label="simple table"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell align="left">Nazwa</TableCell>

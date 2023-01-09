@@ -190,33 +190,106 @@ CREATE TABLE IF NOT EXISTS public."group"
 
 TABLESPACE pg_default;
 
+--------------------------------------------------------------------------------------------------------------------------
+
 ALTER TABLE IF EXISTS public."group"
     OWNER to postgres;
 
 
+    -- Table: public.testGroup
+
+-- DROP TABLE IF EXISTS public."testGroup";
+
+CREATE TABLE IF NOT EXISTS public."testGroup"
+(
+    test_id bigint NOT NULL,
+    group_id bigint NOT NULL,
+    date timestamp without time zone NOT NULL,
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    CONSTRAINT "testGroup_pkey" PRIMARY KEY (id),
+    CONSTRAINT group_id FOREIGN KEY (group_id)
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT test_id FOREIGN KEY (test_id)
+        REFERENCES public.test (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."testGroup"
+    OWNER to postgres;
 
     --------------------------------------------------------------------------------------------------------------------------
 
+-- Table: public.answerToTest
 
-    -- Table: public.grades
+-- DROP TABLE IF EXISTS public."answerToTest";
+
+CREATE TABLE IF NOT EXISTS public."answerToTest"
+(
+    student_id bigint NOT NULL,
+    "groupTest_id" bigint NOT NULL,
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    CONSTRAINT "answerToTest_pkey" PRIMARY KEY (id),
+    CONSTRAINT student_id FOREIGN KEY (student_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT "testGroup_id" FOREIGN KEY ("groupTest_id")
+        REFERENCES public."testGroup" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."answerToTest"
+    OWNER to postgres;
+
+    --------------------------------------------------------------------------------------------------------------------------
+
+-- Table: public.answerToQuestion
+
+-- DROP TABLE IF EXISTS public."answerToQuestion";
+
+CREATE TABLE IF NOT EXISTS public."answerToQuestion"
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    close_answer bigint,
+    open_answer character varying(1000) COLLATE pg_catalog."default",
+    "testAnswer_id" bigint NOT NULL,
+    CONSTRAINT "answerToQuestion_pkey" PRIMARY KEY (id),
+    CONSTRAINT "answerToQuestion_testAnswer_id_fkey" FOREIGN KEY ("testAnswer_id")
+        REFERENCES public."answerToTest" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public."answerToQuestion"
+    OWNER to postgres;
+
+        --------------------------------------------------------------------------------------------------------------------------
+
+-- Table: public.grades
 
 -- DROP TABLE IF EXISTS public.grades;
 
 CREATE TABLE IF NOT EXISTS public.grades
 (
     id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
-    student_id bigint NOT NULL,
-    group_id bigint NOT NULL,
-    date date NOT NULL,
     score bigint NOT NULL,
+    "answerToTest_id" bigint NOT NULL,
+    answers character varying(100) COLLATE pg_catalog."default" NOT NULL,
+    correct character varying(100) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT grades_pkey PRIMARY KEY (id),
-    CONSTRAINT group_fkey FOREIGN KEY (group_id)
-        REFERENCES public."group" (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID,
-    CONSTRAINT student_fkey FOREIGN KEY (student_id)
-        REFERENCES public."user" (id) MATCH SIMPLE
+    CONSTRAINT "answerToTest_id" FOREIGN KEY ("answerToTest_id")
+        REFERENCES public."answerToTest" (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
@@ -230,9 +303,95 @@ ALTER TABLE IF EXISTS public.grades
 
     --------------------------------------------------------------------------------------------------------------------------
 
+-- Table: public.homework
+
+-- DROP TABLE IF EXISTS public.homework;
+
+CREATE TABLE IF NOT EXISTS public.homework
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    name character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    question character varying(400) COLLATE pg_catalog."default" NOT NULL,
+    deadline timestamp without time zone,
+    owner_id bigint,
+    "groupId" bigint,
+    CONSTRAINT homework_pkey PRIMARY KEY (id),
+    CONSTRAINT group_fkey FOREIGN KEY ("groupId")
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT user_fkey FOREIGN KEY (owner_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.homework
+    OWNER to postgres;
 
 
-
-
-
+    
     --------------------------------------------------------------------------------------------------------------------------
+
+
+    -- Table: public.message
+
+-- DROP TABLE IF EXISTS public.message;
+
+CREATE TABLE IF NOT EXISTS public.message
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    sender_id bigint NOT NULL,
+    receiver_id bigint NOT NULL,
+    text character varying(400) COLLATE pg_catalog."default" NOT NULL,
+    "timestamp" timestamp without time zone NOT NULL,
+    CONSTRAINT message_pkey PRIMARY KEY (id),
+    CONSTRAINT message_receiver_id_fkey FOREIGN KEY (receiver_id)
+        REFERENCES public."group" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT message_sender_id_fkey FOREIGN KEY (sender_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.message
+    OWNER to postgres;
+
+
+
+        --------------------------------------------------------------------------------------------------------------------------
+
+        -- Table: public.mail
+
+-- DROP TABLE IF EXISTS public.mail;
+
+CREATE TABLE IF NOT EXISTS public.mail
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9999999 CACHE 1 ),
+    sender_id bigint NOT NULL,
+    receiver_id bigint NOT NULL,
+    text character varying(600) COLLATE pg_catalog."default" NOT NULL,
+    "timestamp" timestamp without time zone NOT NULL,
+    title character varying(200) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT mail_pkey PRIMARY KEY (id),
+    CONSTRAINT mail_receiver_id_fkey FOREIGN KEY (receiver_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT mail_sender_id_fkey FOREIGN KEY (sender_id)
+        REFERENCES public."user" (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.mail
+    OWNER to postgres;

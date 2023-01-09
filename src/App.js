@@ -18,6 +18,9 @@ import TestGradingPage from "./TestGradingPage";
 import GradePage from "./GradePage";
 import MailPage from "./MailPage";
 import MailText from "./MailText";
+import HomeWorkCreator from "./HomeWorkCreator";
+import HomeworkPage from "./HomeworkPage";
+import HomeworkGradingPage from "./HomeworkGradingPage";
 
 const ROLES = {
   Student: "1000",
@@ -54,6 +57,14 @@ const App = () => {
           <Route element={<RequireAuth allowedRoles={[ROLES.Teacher]} />}>
             <Route path="/testCreator" element={<TestCreator />}></Route>
             <Route path="/test/grade/:id" element={<TestGradingPage />}></Route>
+            <Route
+              path="/homeworkCreator/:groupId"
+              element={<HomeWorkCreator></HomeWorkCreator>}
+            ></Route>
+            <Route
+              path="/homework/grade/:id"
+              element={<HomeworkGradingPage></HomeworkGradingPage>}
+            ></Route>
           </Route>
 
           <Route
@@ -61,6 +72,10 @@ const App = () => {
               <RequireAuth allowedRoles={[ROLES.Student, ROLES.Teacher]} />
             }
           >
+            <Route
+              path="/homework/solve/:id"
+              element={<HomeworkPage></HomeworkPage>}
+            ></Route>
             <Route path="/grades" element={<GradePage />}></Route>
             <Route path="/profile">
               <Route path=":login" element={<Profile />} />
