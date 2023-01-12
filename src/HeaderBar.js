@@ -206,9 +206,6 @@ const HeaderBar = () => {
               <MenuItem onClick={openProfile}>
                 <Button variant="text">Profil</Button>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Button variant="text">Ustawienia</Button>
-              </MenuItem>
               <MenuItem onClick={signOut}>
                 <Button variant="text">Wyloguj</Button>
               </MenuItem>

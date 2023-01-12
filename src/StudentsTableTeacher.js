@@ -21,6 +21,8 @@ import { visuallyHidden } from "@mui/utils";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import useAlert from "./hooks/useAlert";
 import { Chip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const login = window.localStorage.getItem("login");
 
@@ -269,6 +271,7 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -357,6 +360,7 @@ export default function EnhancedTable(props) {
 
                   return (
                     <TableRow
+                      className="groupTableHover"
                       hover
                       onClick={(event) => handleClick(event, row.students_id)}
                       role="checkbox"

@@ -35,7 +35,7 @@ const getGroup = async (req, res) => {
   );
 
   const group = await client.query(
-    `select "studentsGroup".students_id, Student.first_name, Student.last_name , Teacher.login
+    `select "studentsGroup".students_id, Student.first_name, Student.last_name, Student.login as studentLogin, Teacher.login
     from public."studentsGroup"
     INNER JOIN public."user" as Student ON "studentsGroup".students_id = Student.id 
     INNER JOIN public."group" on "studentsGroup".group_id = "group".id

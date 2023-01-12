@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { visuallyHidden } from "@mui/utils";
 import useAxiosPrivate from "./hooks/useAxiosPrivate";
 import useAlert from "./hooks/useAlert";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const login = window.localStorage.getItem("login");
 
@@ -249,6 +250,7 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const navigate = useNavigate();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -338,7 +340,8 @@ export default function EnhancedTable(props) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.students_id)}
+                      className="groupTableHover"
+                      onClick={() => navigate("/profile/" + row.studentLogin)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}

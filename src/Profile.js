@@ -107,10 +107,6 @@ const Profile = () => {
             </Typography>
             <Typography>{rolesList[profile.role]}</Typography>
           </Box>
-          <Box sx={{ mt: "auto", mb: 5 }}>
-            <Button>Wyślij mail</Button>
-            <Button>Napisz wiadomość</Button>
-          </Box>
         </Card>
       ) : (
         <p>Brak profilu do wyświetlenia</p>

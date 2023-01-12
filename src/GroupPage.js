@@ -29,7 +29,8 @@ function createData(obj) {
   const first_name = obj.first_name;
   const last_name = obj.last_name;
   const ownerLogin = obj.login;
-  return { students_id, first_name, last_name, ownerLogin };
+  const studentLogin = obj.studentlogin;
+  return { students_id, first_name, last_name, ownerLogin, studentLogin };
 }
 
 const GroupsBoardPage = () => {
