@@ -99,7 +99,9 @@ html {
 
   .bpw-chat-container {
     background-color: #9b3c3c;
-    border: 1px solid #000000;
+      border-style: solid;
+      border-color: #000000;
+      border-width: 2px;
   }
 
   .bpw-from-bot .bpw-chat-bubble .bpw-chat-bubble-content {
