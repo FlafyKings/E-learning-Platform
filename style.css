@@ -75,7 +75,7 @@ html {
   }
 
   .bpw-keyboard-single-choice{
-    background-color: #ffffff;
+    background-color: #9b3c3c;
     border: none;
   }
   .bpw-button, .bpw-button-alt{
@@ -98,7 +98,7 @@ html {
 
 
   .bpw-chat-container {
-    background-color: #ffffff;
+    background-color: #9b3c3c;
     border: 1px solid #000000;
   }
 
@@ -113,17 +113,17 @@ html {
   }
 
   .bpw-composer {
-    background-color: #ffffff;
+    background-color: #9b3c3c;
     border-top: 1px solid #f1ede5;
   }
 
   .bpw-chat-container::-webkit-scrollbar {
     width: 10px;
-    background-color: #ffffff;
+    background-color: #9b3c3c;
   }
 
   .bpw-chat-container::-webkit-scrollbar-thumb {
-    background-color: #ffffff;
+    background-color: #9b3c3c;
   }
 
   .bpw-bot-avatar img,
@@ -142,7 +142,7 @@ html {
   }
 
   ::-webkit-scrollbar-thumb{
-    background-color:#ffffff;
+    background-color:#9b3c3c;
     border-radius:1rem;
     border: 0.5rem solid transparent;
 
@@ -160,7 +160,7 @@ html {
 
   .bpw-chat-container {
     scrollbar-width: thin;
-    scrollbar-color: #f1ede5 #ffffff;
+    scrollbar-color: #f1ede5 #9b3c3c;
     border: none;
   }
 
@@ -175,7 +175,7 @@ html {
   }
 
   .bpw-chat-container::-moz-scrollbar-thumb {
-    background-color:#ffffff;
+    background-color:#9b3c3c;
     border:none;
   }
 
@@ -183,7 +183,7 @@ html {
     text-align: center;
     padding: 10px;
     color: #000000;
-    background:  #ffffff;
+    background:  #9b3c3c;
     font-size: 16px;
     border-top: none;
     border-bottom-right-radius: 10px;
